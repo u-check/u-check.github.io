@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U-Check ThermoMetric - Mobiles U-Wert Messgerät</title>
+
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #2d2d2d; /* Dunkelgrau */
+            --text-color: #f8f9fa; /* Helles Grau / Weiß */
+            --text-color-muted: #adb5bd; /* Gedämpftes Grau */
+            --accent-gradient: linear-gradient(90deg, #4a90e2 0%, #e94e77 100%); /* Bläulich zu Rötlich (Wärmefluss) */
+            --section-bg-color: #3a3a3a; /* Etwas helleres Grau für Sektionen */
+            --border-color: #4a4a4a;
+        }
+
+        html {
+            scroll-behavior: smooth; /* Für sanftes Scrollen bei Nav-Klicks */
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            background-color: rgba(45, 45, 45, 0.85); /* Leicht transparent */
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+         .logo span {
+             font-weight: 300;
+             opacity: 0.8;
+         }
+
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 25px;
+        }
+
+        nav ul li a {
+            color: var(--text-color-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--text-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            padding: 100px 0;
+            background: radial-gradient(circle, rgba(58,58,58,1) 0%, rgba(45,45,45,1) 70%);
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            color: var(--text-color-muted);
+            max-width: 700px;
+            margin: 0 auto 30px auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--accent-gradient);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.3s ease;
+        }
+        .cta-button:hover {
+             transform: scale(1.05);
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+         section:last-of-type {
+             border-bottom: none;
+         }
+
+        section h2 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 60px;
+            font-weight: 700;
+        }
+        
+        .gradient-text {
+             background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-item {
+            background-color: var(--section-bg-color);
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .feature-item h3 {
+            margin-top: 0;
+            font-size: 1.4em;
+             background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            display: inline-block; /* Wichtig für Gradient auf Text */
+            margin-bottom: 15px;
+        }
+
+        .feature-item p {
+            color: var(--text-color-muted);
+            font-size: 0.95em;
+        }
+
+        /* 3D Assembly Section */
+        #produkt {
+             /* Hier könnte ein spezieller Hintergrund oder Layout für die Animation sein */
+             min-height: 150vh; /* Höhe, um Scroll-Animation Platz zu geben */
+        }
+        
+        #produkt .assembly-viewer {
+             position: sticky; /* Macht den Viewer "sticky" während des Scrollens */
+             top: 100px; /* Abstand vom oberen Rand */
+             height: 70vh;
+             width: 100%;
+             margin-top: 40px;
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            background-color: transparent; /* Transparent, um Hintergrund durchscheinen zu lassen */
+            border-radius: 8px;
+        }
+        
+        .assembly-text {
+             /* Style für Text, der neben/unter der Animation erscheint */
+             padding-top: 80vh; /* Startet unterhalb des sticky Viewers */
+             max-width: 600px;
+             margin: 40px auto;
+             text-align: center;
+             color: var(--text-color-muted);
+        }
+
+        .placeholder-notice {
+            font-size: 0.9em;
+            color: #888;
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* About Section */
+        #entwickler {
+            text-align: center;
+        }
+        #entwickler p {
+            max-width: 700px;
+            margin: 0 auto 20px auto;
+             color: var(--text-color-muted);
+        }
+
+        /* Contact Section */
+        #kontakt {
+            text-align: center;
+        }
+         #kontakt p {
+             color: var(--text-color-muted);
+             margin-bottom: 30px;
+         }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            font-size: 0.9em;
+            color: var(--text-color-muted);
+            border-top: 1px solid var(--border-color);
+        }
+         footer a {
+             color: var(--text-color-muted);
+             text-decoration: underline;
+         }
+         footer a:hover {
+             color: var(--text-color);
+         }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container navbar">
+            <a href="#" class="logo">U-Check <span>ThermoMetric</span></a>
+            <nav>
+                <ul>
+                    <li><a href="#produkt">Produkt</a></li>
+                    <li><a href="#entwickler">Der Entwickler</a></li>
+                    <li><a href="#kontakt">Kontakt</a></li>
+                    </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Wissen, was drin ist.</h1>
+                <p>Das U-Check ThermoMetric misst präzise den tatsächlichen U<sub>g</sub>-Wert Ihrer Verglasung – mobil, kostengünstig und benutzerfreundlich. Schluss mit Schätzungen, her mit Fakten!</p>
+                <a href="#produkt" class="cta-button">Entdecke ThermoMetric</a>
+            </div>
+        </section>
+
+        <section id="features">
+            <div class="container">
+                <h2><span class="gradient-text">Vorteile</span> auf einen Blick</h2>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <h3>Präzise Vor-Ort-Messung</h3>
+                        <p>Ermittelt den realen U<sub>g</sub>-Wert direkt am Fenster, unabhängig von fehlenden Dokumentationen oder Alterungseffekten wie Gasverlust.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>Kosteneffizient</h3>
+                        <p>Entwickelt mit Fokus auf kostengünstige, aber zuverlässige Komponenten. Eine erschwingliche Alternative zu teuren Labormessungen oder High-End-Geräten.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>Einfache Bedienung</h3>
+                        <p>Steuerung und Datenanzeige über eine intuitive Weboberfläche auf Ihrem Smartphone, Tablet oder Laptop – keine zusätzliche Software nötig.</p>
+                    </div>
+                     <div class="feature-item">
+                        <h3>Mobile Datenerfassung</h3>
+                        <p>Kompaktes Design und Möglichkeit zum Akkubetrieb. Messdaten können einfach als CSV-Datei heruntergeladen werden.</p>
+                    </div>
+                     <div class="feature-item">
+                        <h3>Zuverlässige Technik</h3>
+                        <p>Basiert auf dem bewährten ESP32-Mikrocontroller und validierter Sensortechnik (DS18B20 & Peltier-Element).</p>
+                    </div>
+                     <div class="feature-item">
+                        <h3>Ideal für Profis</h3>
+                        <p>Perfekt für Energieberater, Fensterbauer und Bauphysiker zur schnellen und genauen Bewertung von Bestandsverglasungen.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="produkt">
+            <div class="container">
+                <h2>Das <span class="gradient-text">ThermoMetric</span> im Detail</h2>
+                <p style="text-align: center; max-width: 700px; margin: -40px auto 60px auto; color: var(--text-color-muted);">
+                    Erleben Sie, wie innovative Technologie und durchdachtes Design zusammenkommen.
+                    <br>(Hier würde die Scroll-Animation starten, die das Gerät zusammensetzt.)
+                </p>
+
+                <div class="assembly-viewer">
+                    <model-viewer
+                        id="thermo-viewer-assembly"
+                        src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" /* <-- HIER DEIN .glb MODELL PFAD */
+                        alt="3D-Modell des U-Check ThermoMetric (Platzhalter)"
+                        camera-controls
+                        enable-pan
+                        shadow-intensity="1"
+                        exposure="1"
+                        camera-orbit="0deg 75deg 1.5m" /* Startansicht anpassen */
+                        field-of-view="30deg"
+                        style="background-color: transparent;">
+                         <div class="placeholder-notice" slot="progress">Lade 3D-Modell...</div>
+                    </model-viewer>
+                     <div class="placeholder-notice" style="margin-top: 10px; display: block; text-align:center;">
+                        **Platzhalter:** Zeigt aktuell den Astronauten. Ersetzen Sie die `src` mit Ihrem ThermoMetric `.glb`-Modell. Die Scroll-Animation muss separat implementiert werden.
+                    </div>
+                </div>
+
+                <div class="assembly-text">
+                    <p>**(Konzept für Scroll-Text):** Beginnend mit dem ESP32-Kern, über die präzisen Temperatursensoren bis hin zum innovativen Peltier-Wärmeflusssensor – jedes Bauteil wurde sorgfältig ausgewählt, um Leistung und Kosteneffizienz zu vereinen.**</p>
+                     <p>**(Konzept für Scroll-Text):** Das Ergebnis ist ein kompaktes, robustes Gerät, das Ihnen verlässliche Daten liefert, wo und wann immer Sie sie brauchen.**</p>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="entwickler">
+             <div class="container">
+                 <h2>Hinter dem <span class="gradient-text">Projekt</span></h2>
+                 <p>Das U-Check ThermoMetric wurde im Rahmen einer Studienarbeit an der Hochschule für Technik Stuttgart von Christoph Samuel Hauser entwickelt.</p>
+                 <p>Ziel war es, ein zugängliches Werkzeug für die Praxis zu schaffen, das die genaue energetische Bewertung von Gebäuden erleichtert. Die Arbeit umfasste die Konzeption, den Bau des Prototyps mit ESP32 und kosteneffizienten Sensoren sowie dessen Validierung gegen professionelle Messsysteme.</p>
+                 </div>
+        </section>
+
+        <section id="kontakt">
+            <div class="container">
+                <h2>Interessiert?</h2>
+                <p>Erfahren Sie mehr über das ThermoMetric oder diskutieren Sie Einsatzmöglichkeiten für Ihr Projekt.</p>
+                <a href="mailto:..." class="cta-button">Kontakt aufnehmen</a>
+                </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            &copy; <span id="year"></span> U-Check - Basierend auf der Studienarbeit von Christoph Samuel Hauser, HFT Stuttgart.
+        </div>
+    </footer>
+
+    <script>
+        // Jahr im Footer aktualisieren
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Optional: Einfache Aktiv-Markierung für Nav-Links beim Scrollen (Basis-Version)
+        const sections = document.querySelectorAll('section');
+        const navLi = document.querySelectorAll('nav ul li a');
+
+        window.addEventListener('scroll', ()=> {
+            let current = '';
+            sections.forEach( section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                // Adjust offset if header height changes significantly
+                if (pageYOffset >= (sectionTop - sectionHeight / 3) ) {
+                    current = section.getAttribute('id');
+                }
+            })
+
+            navLi.forEach( a => {
+                a.classList.remove('active');
+                if(a.getAttribute('href') === ('#' + current)) {
+                    a.classList.add('active');
+                }
+            })
+        });
+
+    </script>
+
+</body>
+</html>
