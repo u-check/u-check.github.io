@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BZC19XGFR2"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-BZC19XGFR2');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>U-Check Glas - Wissen statt Schätzen: Der wahre U-Wert</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://unpkg.com"> <script async src="https://www.googletagmanager.com/gtag/js?id=G-BZC19XGFR2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-BZC19XGFR2');
+      // Note: Default config sends a pageview. Add { 'send_page_view': false } if tracking manually.
+    </script>
 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
         /* === CSS Styling === */
@@ -34,9 +35,11 @@
             --accent-red: #e94e77;
             --accent-orange: #e67e22; /* Für Partikel */
             --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            --header-height: 70px; /* Define header height for scroll offset */
+            --header-height-mobile: 60px;
+            --header-height-desktop: 70px;
         }
 
+        /* === Base Mobile Styles (Mobile-First) === */
         html {
             scroll-behavior: smooth;
             font-size: 16px; /* Basis-Schriftgröße */
@@ -46,7 +49,7 @@
             font-family: var(--font-main);
             margin: 0;
             padding: 0;
-            padding-top: var(--header-height); /* Add padding to prevent content overlap */
+            padding-top: var(--header-height-mobile); /* Mobile header height */
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.7;
@@ -55,50 +58,114 @@
 
         .container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1200px; /* Max width consistent */
             margin: 0 auto;
-            padding: 0 25px;
+            padding: 0 15px; /* Mobile padding */
             box-sizing: border-box;
         }
 
-        /* --- Header & Navigation --- */
+        /* --- Header & Navigation (Mobile Base) --- */
         header {
-            position: fixed; /* Changed to fixed for consistent positioning */
+            position: fixed;
             top: 0;
-            left: 0; /* Ensure it spans full width */
+            left: 0;
             width: 100%;
             background-color: rgba(37, 37, 37, 0.9);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             z-index: 1000;
             border-bottom: 1px solid var(--border-color);
-            height: var(--header-height); /* Set header height */
+            height: var(--header-height-mobile); /* Mobile height */
         }
 
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 25px; /* Adjusted padding */
-            height: 100%; /* Ensure navbar fills header height */
-            box-sizing: border-box; /* Include padding in height calculation */
-            max-width: 1200px; /* Max width for navbar content */
-            margin: 0 auto; /* Center navbar content */
+            padding: 0 15px; /* Mobile padding */
+            height: 100%;
+            box-sizing: border-box;
+            max-width: 1200px; /* Consistent max width */
+            margin: 0 auto; /* Center content */
         }
 
-        .logo img { /* Style for the logo image */
-            height: 40px; /* Adjust height as needed */
+        .logo img {
+            height: 35px; /* Slightly smaller logo on mobile */
             width: auto;
-            vertical-align: middle; /* Align image vertically */
+            vertical-align: middle;
         }
 
+        /* Hamburger Menu Button */
+        .menu-toggle {
+            display: block; /* Visible on mobile */
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 10px;
+            position: relative; /* For line positioning */
+            width: 44px; /* Ensure minimum touch target size */
+            height: 44px; /* Ensure minimum touch target size */
+            z-index: 1100; /* Above nav panel */
+        }
+
+        .menu-toggle .line {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-color);
+            margin: 5px auto;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            border-radius: 1px;
+            transform-origin: center; /* Ensure rotation is centered */
+        }
+
+        /* Hamburger Animation to X */
+        .menu-toggle.open .line1 {
+            transform: translateY(8px) rotate(45deg);
+        }
+        .menu-toggle.open .line2 {
+            opacity: 0;
+            transform: scaleX(0); /* Add scale for smoother hide */
+        }
+        .menu-toggle.open .line3 {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        /* Mobile Navigation Panel */
         .nav-links {
             list-style: none;
             margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 25px; /* Increased gap for desktop */
-            align-items: center; /* Vertically center links */
+            padding: 20px 0; /* Add padding */
+            display: flex; /* Use flex for alignment */
+            flex-direction: column;
+            align-items: center;
+            position: fixed; /* Changed from absolute for full overlay */
+            top: var(--header-height-mobile); /* Position below header */
+            left: 0;
+            width: 100%;
+            height: calc(100vh - var(--header-height-mobile)); /* Full remaining height */
+            background-color: rgba(37, 37, 37, 0.98);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            gap: 0;
+            overflow-y: auto; /* Allow scrolling for long menus */
+            /* Animation properties */
+            transform: translateX(-100%); /* Initially hidden off-screen */
+            opacity: 0;
+            visibility: hidden;
+            transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out, visibility 0.4s;
+        }
+
+        .nav-links.active { /* State when menu is open */
+            transform: translateX(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-links li {
+            width: 100%;
+            text-align: center;
         }
 
         .nav-links li a {
@@ -106,92 +173,83 @@
             text-decoration: none;
             font-weight: 500;
             transition: color 0.2s ease;
-            font-size: 1rem; /* Slightly larger font */
-            padding: 5px 0;
-            position: relative;
-        }
-
-        .nav-links li a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -2px; /* Position underline slightly below */
-            left: 0;
-            background: var(--accent-gradient);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links li a:hover, .nav-links li a.active {
-            color: var(--text-color);
-        }
-
-        .nav-links li a:hover::after, .nav-links li a.active::after {
+            font-size: 1.1rem; /* Mobile link size */
+            padding: 15px 20px; /* Increase padding for touch */
             width: 100%;
+            display: block;
+            box-sizing: border-box;
+            border-bottom: 1px solid var(--border-color); /* Separator lines */
         }
 
-        /* Header Call-to-Action Button */
-        .header-cta {
-            padding: 8px 20px;
-            font-size: 0.9rem;
-            margin-left: 15px; /* Spacing from other nav items */
+        .nav-links li:last-child a {
+            border-bottom: none; /* Remove border from last item */
         }
 
-        /* Hamburger Menu Styles */
-        .menu-toggle {
-            display: none; /* Hidden by default */
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 10px;
-        }
-
-        .menu-toggle .fa-bars {
+        .nav-links li a:hover,
+        .nav-links li a.active { /* Style active link on mobile too */
             color: var(--text-color);
-            font-size: 1.8rem;
+            background-color: rgba(255, 255, 255, 0.05); /* Subtle highlight */
+        }
+
+        /* Hide header CTA button on mobile */
+        .header-cta {
+            display: none;
         }
 
 
-        /* --- Allgemeine Sektions-Styles --- */
+        /* --- General Section Styles (Mobile Base) --- */
         section {
-            padding: 80px 0; /* Slightly reduced padding */
+            padding: 50px 0; /* Mobile padding */
             border-bottom: 1px solid var(--border-color);
         }
         section:last-of-type { border-bottom: none; }
-        section:nth-child(even) { background-color: var(--bg-light); } /* Swapped odd/even for visual flow */
+        section:nth-child(odd) { background-color: var(--bg-light); } /* Adjusted for visual flow */
 
         h1, h2, h3 { font-weight: 700; margin-bottom: 0.8em; }
-        h1 { font-size: clamp(2.4rem, 5.5vw, 3.6rem); line-height: 1.15; } /* Slightly adjusted H1 size */
-        h2 { font-size: clamp(1.8rem, 4.5vw, 2.6rem); text-align: center; margin-bottom: 50px; }
-        h3 { font-size: 1.4rem; }
+        /* Fluid Typography with clamp() */
+        h1 { font-size: clamp(2rem, 1.5rem + 3vw, 2.8rem); line-height: 1.2; } /* Adjusted mobile H1 */
+        h2 { font-size: clamp(1.7rem, 1.4rem + 2.5vw, 2.2rem); text-align: center; margin-bottom: 40px; } /* Adjusted mobile H2 */
+        h3 { font-size: clamp(1.2rem, 1.1rem + 1vw, 1.4rem); } /* Adjusted mobile H3 */
 
-        p { margin-bottom: 1.5em; color: var(--text-muted); }
-        p.lead { font-size: 1.15rem; color: var(--text-color); font-weight: 400; max-width: 750px; margin-left: auto; margin-right: auto;}
+        p {
+            margin-bottom: 1.5em;
+            color: var(--text-muted);
+            font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem); /* Fluid paragraph */
+        }
+        p.lead {
+            font-size: clamp(1.05rem, 1rem + 0.5vw, 1.15rem); /* Fluid lead */
+            color: var(--text-color);
+            font-weight: 400;
+            max-width: 750px; /* Keep max width */
+            margin-left: auto;
+            margin-right: auto;
+        }
 
         .text-center { text-align: center; }
         .gradient-text { background: var(--accent-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-fill-color: transparent; display: inline-block; }
         .subtle-gradient-bg { background: linear-gradient(120deg, rgba(58, 123, 213, 0.05) 0%, rgba(233, 78, 119, 0.05) 100%); }
 
-        /* Improved Button Styles */
+        /* Button Styles (Mobile Base) */
         .cta-button {
             display: inline-block;
             background: var(--accent-gradient);
             color: white;
-            padding: 15px 40px; /* Slightly larger padding */
+            padding: 14px 35px; /* Mobile padding */
             border: none;
-            border-radius: 50px; /* More rounded */
+            border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 1.05rem; /* Slightly larger font */
+            font-size: 1rem; /* Mobile font size */
             cursor: pointer;
-            position: relative; /* Needed for pseudo-element */
-            overflow: hidden; /* Clip pseudo-element */
-            z-index: 1; /* Ensure text is above pseudo-element */
-            transition: color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Added color transition */
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
         }
 
-        .cta-button::before { /* Cool hover animation */
+        .cta-button::before {
             content: '';
             position: absolute;
             top: 0;
@@ -204,10 +262,11 @@
             border-radius: 50px;
         }
 
-        .cta-button:hover {
-            transform: translateY(-4px) scale(1.02); /* Slightly more pronounced hover */
+        .cta-button:hover, .cta-button:focus-visible { /* Add focus-visible */
+            transform: translateY(-4px) scale(1.02);
             box-shadow: 0 8px 25px rgba(58, 123, 213, 0.25), 0 6px 20px rgba(233, 78, 119, 0.25);
-            color: white; /* Ensure text stays white */
+            color: white;
+            outline: none; /* Remove default outline if custom focus is applied */
         }
 
         .cta-button:hover::before {
@@ -220,130 +279,137 @@
             border: 1px solid var(--border-color);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
-        .cta-button.secondary:hover {
-             transform: translateY(-4px) scale(1.02);
-             box-shadow: 0 7px 18px rgba(0, 0, 0, 0.3); /* Darker shadow */
-             border-color: var(--text-muted);
-             background: var(--bg-medium); /* Darken background on hover */
+        .cta-button.secondary:hover, .cta-button.secondary:focus-visible { /* Add focus-visible */
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 7px 18px rgba(0, 0, 0, 0.3);
+            border-color: var(--text-muted);
+            background: var(--bg-medium);
         }
-         .cta-button.secondary::before { /* Different hover effect for secondary */
+        .cta-button.secondary::before {
             background: rgba(255, 255, 255, 0.1);
-         }
-
+        }
 
         /* --- Hero Section --- */
         .hero {
-            min-height: calc(95vh - var(--header-height)); /* Adjust height considering fixed header */
+            min-height: calc(90vh - var(--header-height-mobile)); /* Adjust height for mobile */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding-top: 0; /* Remove top padding as body has it now */
-            padding-bottom: 40px; /* Add some bottom padding */
-            background: linear-gradient(rgba(37, 37, 37, 0.9), rgba(37, 37, 37, 0.95)), url('img/Gebaeudethermografie_Fachwerk.png');
-            background-size: cover;
-            background-position: center;
+            padding-top: 0; /* Body padding handles this */
+            padding-bottom: 40px;
+            /* Removed background image as requested */
             border-bottom: 1px solid var(--border-color);
         }
         .hero h1 {
-             margin-bottom: 15px; /* Reduced margin */
-             margin-top: 0; /* Remove potential top margin */
+            margin-bottom: 15px;
+            margin-top: 0;
         }
         .hero .lead { margin-bottom: 35px; }
-        .hero .cta-button { margin-top: 10px;} /* Ensure button has some top margin */
+        .hero .cta-button { margin-top: 10px;}
 
-        /* --- Problem / Lösung Sections --- */
-        .problem-solution-grid {
+        /* --- Problem / Lösung / How it Works / Product Grids (Mobile Base) --- */
+        .problem-solution-grid,
+        .info-grid,
+        .how-it-works-content,
+        .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 50px; /* Slightly reduced gap */
-            align-items: start; /* Align items to the start */
+            grid-template-columns: 1fr; /* Single column on mobile */
+            gap: 40px;
+            align-items: start;
         }
-        .problem-solution-grid img {
-            max-width: 100%;
+
+        /* Ensure images/SVGs within grids are responsive on mobile */
+        .problem-solution-grid img,
+        .how-it-works-content img,
+        .how-it-works-content svg,
+        .product-grid img {
+            max-width: 100%; /* Ensure images don't overflow */
+            height: auto; /* Maintain aspect ratio */
             border-radius: 8px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            display: block; /* Prevent extra space below */
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* Specific styles for Problem image caption */
+        .measurement-schematic svg { max-width: 300px; } /* Limit schematic size */
+        .product-image-static { max-width: 90%; } /* Limit product image width slightly */
+
         .problem-image-caption {
-             display:block;
-             text-align:center;
-             color: var(--text-muted);
-             margin-top: 10px;
-             font-size: 0.9rem;
+            display:block;
+            text-align:center;
+            color: var(--text-muted);
+            margin-top: 10px;
+            font-size: 0.9rem;
         }
-        .problem-section-points h3 { margin-top: 0; } /* Remove extra margin above h3 */
+        .problem-section-points h3 { margin-top: 0; }
 
-        /* --- Wärmebildkamera Info Box --- */
-         .waermebild-info {
+        .waermebild-info {
             background-color: rgba(0, 0, 0, 0.15);
             padding: 20px;
             border-radius: 8px;
             margin-top: 30px;
             border: 1px solid var(--border-color);
-         }
-         .waermebild-info h4 {
+        }
+        .waermebild-info h4 {
             margin-top: 0;
             margin-bottom: 10px;
             color: var(--accent-orange);
-         }
-         .waermebild-info p {
+        }
+        .waermebild-info p {
             margin-bottom: 0;
             font-size: 0.95rem;
-         }
+        }
 
-
-        /* --- Interaktive U-Wert Simulation --- */
-        #simulation-section { /* Renamed from #waermeverlust-simulation */
-             padding: 80px 0;
-             border-top: 1px solid var(--border-color);
-             border-bottom: 1px solid var(--border-color);
-             background-color: var(--bg-light);
-         }
+        /* --- Interaktive U-Wert Simulation (Mobile Base) --- */
+        #simulation-section {
+            padding: 50px 0; /* Mobile padding */
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            /* Changed background to default dark */
+            background-color: var(--bg-color);
+        }
 
         .simulation-container {
             background-color: var(--bg-medium);
-            padding: 35px 30px;
+            padding: 25px 20px; /* Mobile padding */
             border-radius: 12px;
             margin: 35px auto 0 auto;
             max-width: 950px;
             position: relative;
             border: 1px solid var(--border-color);
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column; /* Stack vertically on mobile */
             align-items: center;
-            gap: 40px;
+            gap: 25px; /* Mobile gap */
             box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
 
         .svg-container {
-            flex: 1 1 280px;
+            width: 100%; /* Full width */
             text-align: center;
-            min-width: 200px;
         }
 
         #window-svg {
             width: 100%;
-            max-width: 180px;
+            max-width: 150px; /* Smaller SVG on mobile */
             height: auto;
             margin-bottom: 15px;
             display: inline-block;
             overflow: visible;
         }
 
-        .window-frame-polygon {
-             fill: #505050; stroke: #333; stroke-width: 1.5;
-         }
-        .window-glass-polygon {
-             fill: var(--bg-medium); stroke: #777; stroke-width: 0.5; opacity: 0.8;
-         }
+        .window-frame-polygon { fill: #505050; stroke: #333; stroke-width: 1.5; }
+        .window-glass-polygon { fill: var(--bg-medium); stroke: #777; stroke-width: 0.5; opacity: 0.8; }
         .window-gap-polygon { fill: none; }
 
         .heat-particle {
             fill: var(--accent-red); r: 2; opacity: 0;
             animation: flow-and-cool 4s linear infinite;
+            /* Optimization hint - use if testing shows benefit */
+            will-change: transform, opacity;
         }
 
         @keyframes flow-and-cool {
@@ -364,126 +430,135 @@
         .heat-particle:nth-of-type(8) { animation-delay: 3.5s; }
 
         .controls-explanation-container {
-            flex: 1 1 450px; text-align: left; min-width: 300px;
+            width: 100%; /* Full width */
+            text-align: left; /* Align text left for readability */
         }
-        #animation-comment { color: var(--text-muted); font-weight: 500; font-size: 1rem; margin-top: 10px; }
+        #animation-comment { color: var(--text-muted); font-weight: 500; font-size: 1rem; margin-top: 10px; text-align: center; }
 
         #cost-savings-text {
-            margin-top: 25px; font-size: 1rem; color: var(--text-muted); background-color: rgba(0,0,0,0.15);
+            margin-top: 25px; font-size: 0.95rem; color: var(--text-muted); background-color: rgba(0,0,0,0.15);
             padding: 15px 20px; border-radius: 8px; line-height: 1.6; border: 1px solid var(--border-color);
         }
-        #cost-savings-text strong { color: var(--text-light); font-weight: 600;}
+        #cost-savings-text strong { color: var(--text-color); font-weight: 600;} /* Changed to text-color */
         #cost-savings-text span[id^="calculated-savings"] { color: var(--accent-red); font-weight: 700; font-size: 1.1em; }
-        #cost-savings-text small { display: block; margin-top: 10px; font-size: 0.8rem; line-height: 1.4; opacity: 0.8; }
-        #cost-savings-text .calc-param { color: var(--text-light); font-weight: 500; }
+        #cost-savings-text small { display: block; margin-top: 10px; font-size: 0.75rem; line-height: 1.4; opacity: 0.8; }
+        #cost-savings-text .calc-param { color: var(--text-muted); font-weight: 500; } /* Changed to muted */
 
         #info-toggle {
-            position: absolute; top: 18px; right: 18px; cursor: pointer; font-size: 1.6rem; color: var(--text-muted);
+            position: absolute; top: 10px; right: 10px; /* Adjusted position */
+            cursor: pointer; font-size: 1.4rem; color: var(--text-muted);
             transition: transform 0.3s ease, color 0.3s ease; z-index: 10;
+            background: none; border: none; padding: 5px; /* Ensure it's a button */
         }
-        #info-toggle:hover { transform: scale(1.15); color: var(--text-light); }
+        #info-toggle:hover { transform: scale(1.15); color: var(--text-color); }
         #explanation-box {
             display: none; margin-top: 18px; padding: 15px; background-color: rgba(0,0,0,0.25); border-radius: 6px;
             font-size: 0.9rem; border: 1px solid var(--border-color); line-height: 1.5;
         }
 
         .slider {
-            -webkit-appearance: none; appearance: none; width: 95%; height: 8px;
+            -webkit-appearance: none; appearance: none; width: 100%; height: 8px; /* Full width */
             background: linear-gradient(90deg, var(--accent-blue) 0%, var(--accent-orange) 50%, var(--accent-red) 100%);
             outline: none; opacity: 0.85; transition: opacity .2s; border-radius: 4px;
             margin-bottom: 20px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1);
         }
         .slider:hover { opacity: 1; }
         .slider::-webkit-slider-thumb {
-            -webkit-appearance: none; appearance: none; width: 24px; height: 24px; background: var(--text-light);
+            -webkit-appearance: none; appearance: none; width: 24px; height: 24px; background: var(--text-color);
             cursor: pointer; border-radius: 50%; border: 6px solid var(--bg-medium); margin-top: -8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.5); transition: background 0.2s ease;
         }
-         .slider::-webkit-slider-thumb:hover { background: white; }
+        .slider::-webkit-slider-thumb:hover { background: white; }
         .slider::-moz-range-thumb {
-             width: 12px; height: 12px; background: var(--text-light); cursor: pointer; border-radius: 50%;
-             border: 4px solid var(--bg-medium); box-shadow: 0 1px 3px rgba(0,0,0,0.4);
-         }
-         .slider-labels {
-             display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted);
-             margin: -15px 2% 15px 2%; padding: 0 5px;
-         }
-         .u-wert-output-area label { font-size: 1.05rem; display: block; margin-bottom: 5px; color: var(--text-color); font-weight: 500; }
-         #u-value-output {
-            font-size: 2.2rem; font-weight: 700; display: block; margin-bottom: 8px;
+            width: 12px; height: 12px; background: var(--text-color); cursor: pointer; border-radius: 50%;
+            border: 4px solid var(--bg-medium); box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+        }
+        .slider-labels {
+            display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted);
+            margin: -15px 0 15px 0; /* Adjusted margin */
+            padding: 0 5px;
+        }
+        .u-wert-output-area label { font-size: 1.05rem; display: block; margin-bottom: 5px; color: var(--text-color); font-weight: 500; }
+        #u-value-output {
+            font-size: clamp(1.8rem, 1.5rem + 3vw, 2.2rem); /* Fluid output size */
+            font-weight: 700; display: block; margin-bottom: 8px;
             background: var(--accent-gradient); -webkit-background-clip: text; background-clip: text;
             -webkit-text-fill-color: transparent; text-fill-color: transparent;
-         }
-         #u-value-comment { font-size: 1rem; color: var(--text-muted); min-height: 1.3em; display: block; font-weight: 500; }
-
-
-        /* --- Wie es funktioniert Section --- */
-        .how-it-works-content {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 50px; align-items: start; /* Changed to start */
         }
-        .measurement-schematic svg { width: 100%; height: auto; max-width: 400px; display: block; margin: 0 auto; }
+        #u-value-comment { font-size: 1rem; color: var(--text-muted); min-height: 1.3em; display: block; font-weight: 500; }
+
+        /* --- Wie es funktioniert Section (Mobile Base) --- */
+        .formula { font-family: 'Courier New', Courier, monospace; background: var(--bg-medium); padding: 10px 15px; border-radius: 4px; display: inline-block; border: 1px solid var(--border-color); word-break: break-all; }
+        .formula sub { font-size: 0.8em; }
+        .measurement-schematic svg { max-width: 300px; } /* Specific size for schematic */
         .glass-pane { fill: #add8e6; fill-opacity: 0.2; stroke: #add8e6; stroke-width: 1; }
         .sensor-schematic { fill: var(--text-muted); }
         .arrow { stroke: var(--accent-red); stroke-width: 2; marker-end: url(#arrowhead); }
         .temp-label { font-size: 10px; fill: var(--text-color); }
         .flux-label { font-size: 12px; fill: var(--accent-red); font-weight: bold; }
-        .formula { font-family: 'Courier New', Courier, monospace; background: var(--bg-medium); padding: 10px 15px; border-radius: 4px; display: inline-block; border: 1px solid var(--border-color); }
-        .formula sub { font-size: 0.8em; }
 
 
-        /* --- Produkt / 3D View Section --- */
-        #produkt-detail { background-color: var(--bg-color); }
-        .product-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;
-            align-items: center; margin-bottom: 60px;
-        }
-        .product-image-static { display: block; max-width: 100%; margin: 0 auto; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.25); }
+        /* --- Produkt / 3D View Section (Mobile Base) --- */
+        #produkt-detail { background-color: var(--bg-color); } /* Keep background consistent */
+        .product-grid { margin-bottom: 60px; } /* Spacing */
         #threejs-container {
-            width: 100%; height: 60vh; min-height: 400px; margin: 40px auto; position: relative; background-color: #1a1a1a;
+            width: 100%; height: 50vh; min-height: 350px; /* Mobile height */
+            margin: 40px auto; position: relative; background-color: #1a1a1a;
             border-radius: 8px; border: 1px solid var(--border-color); overflow: hidden;
         }
-         #threejs-container canvas { display: block; }
-         .placeholder-notice { margin: 20px auto; display: block; text-align:center; font-size: 0.9rem; color: var(--text-muted); }
+        #threejs-container canvas { display: block; }
+        .placeholder-notice { margin: 20px auto; display: block; text-align:center; font-size: 0.9rem; color: var(--text-muted); }
+        /* Style for loading progress */
+        #threejs-loading-progress {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            width: 0%;
+            height: 5px;
+            background-color: var(--accent-blue);
+            transition: width 0.5s ease, opacity 0.5s ease 0.5s; /* Added opacity transition */
+            opacity: 1; /* Start visible */
+            z-index: 10; /* Ensure visible */
+        }
 
 
-        /* --- Vorteile Section --- */
-        .advantages-list { list-style: none; padding: 0; max-width: 800px; margin: 0 auto; }
-        .advantages-list li { display: flex; align-items: flex-start; margin-bottom: 25px; font-size: 1.1rem; }
+        /* --- Vorteile Section (Mobile Base) --- */
+        .advantages-list { list-style: none; padding: 0; margin: 0 auto; }
+        .advantages-list li { display: flex; align-items: flex-start; margin-bottom: 25px; font-size: 1.05rem; /* Slightly smaller on mobile */ }
         .advantages-list li::before {
             content: '✓'; display: inline-block; background: var(--accent-gradient); color: white; width: 26px; height: 26px;
-            border-radius: 50%; text-align: center; line-height: 26px; margin-right: 18px; flex-shrink: 0;
+            border-radius: 50%; text-align: center; line-height: 26px; margin-right: 15px; /* Smaller margin */ flex-shrink: 0;
             font-weight: bold; font-size: 1rem;
         }
         .advantages-list li strong { color: var(--text-color); font-weight: 600; }
 
 
-        /* --- Mietmodell / Förderungen --- */
-        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        /* --- Mietmodell / Förderungen (Mobile Base) --- */
         .info-box {
-            background-color: var(--bg-light); padding: 35px; border-radius: 10px; border: 1px solid var(--border-color);
+            background-color: var(--bg-light); padding: 30px 25px; /* Mobile padding */ border-radius: 10px; border: 1px solid var(--border-color);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-         .info-box:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .info-box:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
         .info-box h3 { margin-top: 0; color: var(--accent-blue); }
         .info-box p:last-of-type { margin-bottom: 0; }
 
 
-        /* --- Team Section --- */
+        /* --- Team Section (Mobile Base) --- */
         .team-container { text-align: center; }
-        .team-members { display: flex; justify-content: center; gap: 50px; margin-top: 40px; flex-wrap: wrap; }
+        .team-members { display: flex; justify-content: center; gap: 30px; margin-top: 40px; flex-wrap: wrap; }
         .team-member { max-width: 250px; }
         .team-member img {
-            width: 130px; height: 130px; border-radius: 50%; margin-bottom: 20px; display: block; margin-left: auto;
+            width: 120px; height: 120px; /* Slightly smaller */ border-radius: 50%; margin-bottom: 15px; display: block; margin-left: auto;
             margin-right: auto; border: 3px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             object-fit: cover;
         }
-        .team-member h4 { margin-bottom: 5px; font-size: 1.2rem; color: var(--text-color); }
+        .team-member h4 { margin-bottom: 5px; font-size: 1.1rem; color: var(--text-color); }
         .team-member p { font-size: 0.9rem; color: var(--text-muted); }
 
 
-        /* --- Vorbestellen Section --- */
+        /* --- Vorbestellen Section (Mobile Base) --- */
         #vorbestellen { background-color: var(--bg-light); }
-        .preorder-form { max-width: 550px; margin: 40px auto; text-align: center; }
+        .preorder-form { max-width: 100%; margin: 40px auto; text-align: center; } /* Full width on mobile */
         .preorder-form label { display: block; margin-bottom: 10px; font-weight: 500; color: var(--text-muted); }
         .preorder-form input[type="email"] {
             width: 100%; padding: 15px 20px; margin-bottom: 20px; border: 1px solid var(--border-color);
@@ -493,111 +568,248 @@
         .preorder-form input[type="email"]:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.3); }
         .preorder-form input[type="email"]::placeholder { color: var(--text-muted); opacity: 0.7; }
         .preorder-form button { width: 100%; font-size: 1.1rem; padding: 16px 35px;}
-        #form-response { margin-top: 20px; font-weight: 500; }
+        #form-response {
+            margin-top: 20px;
+            font-weight: 500;
+            min-height: 1.2em; /* Reserve space */
+            opacity: 0; /* Start hidden */
+            transition: opacity 0.3s ease-in-out;
+        }
         #form-response.success { color: #2ecc71; }
         #form-response.error { color: var(--accent-red); }
 
 
-        /* --- Footer --- */
+        /* --- Footer (Mobile Base) --- */
         footer {
-            background-color: var(--bg-color); text-align: center; padding: 50px 0; margin-top: 0;
+            background-color: var(--bg-color); text-align: center; padding: 40px 0; margin-top: 0;
             font-size: 0.9rem; color: var(--text-muted); border-top: 1px solid var(--border-color);
         }
-         footer .container { display: flex; flex-direction: column; align-items: center; gap: 15px; }
-         .footer-links a {
-             color: var(--text-muted); text-decoration: none; margin: 0 10px; transition: color 0.2s ease;
-             border-bottom: 1px solid transparent;
-         }
-         .footer-links a:hover { color: var(--text-color); border-bottom: 1px solid var(--accent-blue); }
-         .footer-social-links a { color: var(--text-muted); margin: 0 8px; font-size: 1.3rem; transition: color 0.2s ease, transform 0.2s ease; }
-         .footer-social-links a:hover { color: var(--text-color); transform: scale(1.1); }
+        footer .container { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .footer-links { display: flex; flex-direction: column; gap: 10px; /* Stack links */ }
+        .footer-links a {
+            color: var(--text-muted); text-decoration: none; margin: 0; /* Remove horizontal margin */ transition: color 0.2s ease;
+            border-bottom: 1px solid transparent; padding: 5px 0; /* Add padding */
+        }
+        .footer-links a:hover { color: var(--text-color); border-bottom: 1px solid var(--accent-blue); }
+        .footer-social-links a { color: var(--text-muted); margin: 0 8px; font-size: 1.3rem; transition: color 0.2s ease, transform 0.2s ease; }
+        .footer-social-links a:hover { color: var(--text-color); transform: scale(1.1); }
 
+        /* --- Accessibility Focus Styles --- */
+        /* Default focus outline removal (ONLY if providing a custom one below) */
+        /* a:focus, button:focus, input:focus, select:focus, textarea:focus { outline: none; } */
 
-        /* --- Responsive Anpassungen --- */
-        @media (max-width: 992px) {
-            .problem-solution-grid, .info-grid, .how-it-works-content, .product-grid { grid-template-columns: 1fr; gap: 40px; }
-            .problem-solution-grid > div:last-child,
-            .how-it-works-content > div:last-child { order: -1; margin-bottom: 30px; }
-             .problem-solution-grid img, /* Ensure images in problem section are also responsive */
-             .how-it-works-content img,
-             .how-it-works-content svg { margin-left: auto; margin-right: auto; max-width: 80%; }
-             .measurement-schematic svg { max-width: 300px; }
-             #threejs-container { height: 50vh; min-height: 350px;}
+        /* Custom focus style using :focus-visible for keyboard/programmatic focus */
+        a:focus-visible,
+        button:focus-visible,
+        input[type="email"]:focus-visible,
+        input[type="range"]:focus-visible,
+        .menu-toggle:focus-visible,
+        #info-toggle:focus-visible { /* Add all interactive elements */
+          outline: 3px solid var(--accent-blue);
+          outline-offset: 2px;
+          box-shadow: 0 0 0 5px rgba(58, 123, 213, 0.4); /* Optional glow */
+        }
+        /* Fallback for browsers not supporting :focus-visible (might show on mouse click) */
+        /* a:focus, button:focus, ... { ... } */
+
+        /* --- Reduced Motion Preferences --- */
+        @media (prefers-reduced-motion: reduce) {
+          html {
+             scroll-behavior: auto !important; /* Disable smooth scrolling */
+          }
+          *, *::before, *::after {
+             /* Broadly disable or significantly reduce animations/transitions */
+             animation-duration: 0.01ms !important;
+             animation-iteration-count: 1 !important;
+             transition-duration: 0.01ms !important;
+             transition-delay: 0ms !important;
+          }
+          /* Specific overrides for essential feedback or problematic animations */
+          .heat-particle {
+              animation: none;
+              display: none; /* Hide particles completely */
+          }
+          .cta-button:hover, .cta-button:focus-visible {
+              transform: none; /* Disable button hover transform */
+          }
+          .cta-button::before {
+              transition: none; /* Disable button hover background effect */
+          }
+          .info-box:hover {
+              transform: none; /* Disable info box hover transform */
+          }
+          .menu-toggle .line {
+              transition: none; /* Disable hamburger line transitions */
+          }
+          .nav-links {
+              transition: none; /* Disable mobile menu panel slide */
+          }
+          /* Ensure OrbitControls autoRotate is off if JS doesn't handle it */
+          /* Add other specific animation overrides as needed */
         }
 
-        @media (max-width: 768px) {
-            body { padding-top: 60px; } /* Adjust body padding for smaller header */
-            header { height: 60px; }
-            .navbar { padding: 0 15px; } /* Adjust navbar padding */
+        /* --- Lazy Loading Placeholders --- */
+        img.lazy {
+          background-color: var(--bg-light); /* Simple background color placeholder */
+          /* Optional: Add dimensions via CSS if needed, though width/height attributes are preferred */
+          /* width: [image_width]px; */
+          /* height: [image_height]px; */
+          transition: opacity 0.5s ease-in-out; /* Fade-in effect */
+          opacity: 0.5; /* Start slightly transparent */
+        }
+        img:not(.lazy) { /* Style for when image is loaded */
+           opacity: 1;
+        }
 
-            .nav-links {
-                display: none; /* Hide desktop nav links */
-                position: absolute;
-                top: 60px; /* Position below header */
-                left: 0;
-                width: 100%;
-                background-color: rgba(37, 37, 37, 0.98); /* Slightly less transparent */
-                backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
-                flex-direction: column;
-                align-items: center;
-                padding: 20px 0;
-                gap: 0; /* Reset gap for column layout */
-                border-bottom: 1px solid var(--border-color);
+
+        /* === Tablet and Larger Styles (min-width: 769px) === */
+        @media (min-width: 769px) {
+            body {
+                padding-top: var(--header-height-desktop); /* Desktop header height */
             }
-            .nav-links.active {
-                display: flex; /* Show when active */
+            header {
+                height: var(--header-height-desktop); /* Desktop height */
+            }
+            .container {
+                padding: 0 25px; /* Desktop padding */
+            }
+            .navbar {
+                padding: 0 25px; /* Desktop padding */
+            }
+            .logo img {
+                height: 40px; /* Restore logo size */
+            }
+            .menu-toggle {
+                display: none; /* Hide hamburger button */
+            }
+
+            /* Desktop Navigation */
+            .nav-links {
+                display: flex; /* Show desktop nav */
+                position: static; /* Reset positioning */
+                flex-direction: row;
+                align-items: center; /* Vertically center */
+                height: auto; /* Reset height */
+                width: auto; /* Reset width */
+                background-color: transparent;
+                backdrop-filter: none;
+                border-bottom: none;
+                padding: 0; /* Reset padding */
+                gap: 25px; /* Desktop gap */
+                /* Reset animation properties */
+                transform: none;
+                opacity: 1;
+                visibility: visible;
+                overflow-y: visible;
             }
             .nav-links li {
+                width: auto; /* Reset width */
+            }
+            .nav-links li a {
+                padding: 5px 0; /* Restore desktop padding */
+                width: auto; /* Reset width */
+                display: inline-block; /* Change display */
+                font-size: 1rem; /* Restore desktop font size */
+                border-bottom: none; /* Remove mobile border */
+                position: relative; /* For underline effect */
+                background-color: transparent; /* Reset mobile hover bg */
+            }
+            .nav-links li a::after { /* Underline effect */
+                content: '';
+                position: absolute;
+                width: 0;
+                height: 2px;
+                bottom: -2px;
+                left: 0;
+                background: var(--accent-gradient);
+                transition: width 0.3s ease;
+            }
+            .nav-links li a:hover::after,
+            .nav-links li a.active::after {
                 width: 100%;
-                text-align: center;
-            }
-             .nav-links li a {
-                padding: 15px 0; /* More vertical padding */
-                width: 100%;
-                display: block; /* Make links block level */
-                font-size: 1.1rem;
-                border-bottom: 1px solid var(--border-color); /* Separator lines */
-             }
-             .nav-links li:last-child a {
-                border-bottom: none; /* Remove border from last item */
-             }
-            .nav-links li a::after {
-                display: none; /* Hide underline effect on mobile */
-            }
-            .header-cta { /* Hide header CTA on mobile, maybe integrate into menu */
-                display: none;
             }
 
-
-            .menu-toggle {
-                display: block; /* Show hamburger */
+            /* Show header CTA button */
+            .header-cta {
+                display: inline-block;
+                padding: 8px 20px;
+                font-size: 0.9rem;
+                margin-left: 15px;
             }
 
-            h1 { font-size: 2rem; }
-            h2 { font-size: 1.7rem; margin-bottom: 40px;}
-            section { padding: 50px 0; }
-            .container { padding: 0 15px; }
+            /* --- General Section Styles (Desktop) --- */
+            section {
+                padding: 80px 0; /* Desktop padding */
+            }
+            h1 { font-size: clamp(2.4rem, 5.5vw, 3.6rem); } /* Desktop H1 */
+            h2 { font-size: clamp(1.8rem, 4.5vw, 2.6rem); margin-bottom: 50px; } /* Desktop H2 */
+            p.lead { font-size: 1.15rem; } /* Desktop lead */
 
-            .simulation-container { flex-direction: column; gap: 25px; padding: 25px 20px; }
-            .controls-explanation-container { text-align: center; width: 100%; }
-            .controls-explanation-container label,
-            .controls-explanation-container h4 { text-align: left; }
-            .slider { width: 100%; }
-            .slider-labels { margin-left: 0; margin-right: 0; }
-            #cost-savings-text { text-align: left;}
-            #cost-savings-text small { font-size: 0.75rem; }
-            #info-toggle { top: 10px; right: 10px; font-size: 1.4rem;}
-            #window-svg { max-width: 150px;}
+            /* --- Grid Layouts (Desktop) --- */
+            .problem-solution-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 50px;
+            }
+            .info-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 40px;
+            }
+            .how-it-works-content {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 50px;
+            }
+            .product-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 40px;
+                align-items: center; /* Align items center on desktop */
+            }
 
-            .preorder-form { max-width: 100%; }
-            .footer-links { display: flex; flex-direction: column; gap: 10px; }
-            .footer-links a { margin: 0; }
+            /* --- Simulation (Desktop) --- */
+            .simulation-container {
+                flex-direction: row; /* Side-by-side layout */
+                padding: 35px 30px;
+                gap: 40px;
+                align-items: flex-start; /* Align items to top */
+            }
+            .svg-container {
+                flex: 1 1 280px; /* Allow shrinking/growing */
+                min-width: 200px;
+            }
+            #window-svg { max-width: 180px; } /* Restore desktop SVG size */
+            .controls-explanation-container {
+                flex: 1 1 450px; /* Allow shrinking/growing */
+                min-width: 300px;
+                text-align: left;
+            }
+            .slider { width: 95%; }
+            .slider-labels { margin-left: 2%; margin-right: 2%; }
+
+            /* --- 3D View (Desktop) --- */
+            #threejs-container {
+                height: 60vh; min-height: 400px; /* Desktop height */
+            }
+
+            /* --- Footer (Desktop) --- */
+            .footer-links {
+                flex-direction: row; /* Horizontal links */
+                gap: 0; /* Reset gap */
+            }
+            .footer-links a {
+                margin: 0 10px; /* Restore horizontal margin */
+                padding: 0; /* Reset padding */
+            }
         }
 
+        /* === Larger Desktop Styles (Optional: min-width: 1201px) === */
+        @media (min-width: 1201px) {
+           /* Optional styles for very large screens */
+           /* e.g., slightly larger base font size or increased spacing */
+           /* html { font-size: 17px; } */
+           /* .container { max-width: 1300px; } */
+        }
     </style>
 
-    </head>
+</head>
 <body>
 
     <header>
@@ -606,10 +818,12 @@
                 <img src="img/U-Check_Logo.png" alt="U-Check Logo">
             </a>
             <nav>
-                <button class="menu-toggle" id="mobile-menu" aria-label="Menü öffnen/schließen" aria-expanded="false">
-                    <i class="fas fa-bars"></i>
+                <button class="menu-toggle" id="mobile-menu" aria-label="Menü öffnen" aria-controls="nav-list" aria-expanded="false">
+                    <span class="line line1"></span>
+                    <span class="line line2"></span>
+                    <span class="line line3"></span>
                 </button>
-                <ul class="nav-links" id="nav-list">
+                <ul class="nav-links" id="nav-list" aria-expanded="false">
                     <li><a href="#simulation-section">Simulation</a></li>
                     <li><a href="#produkt-detail">Produkt</a></li>
                     <li><a href="#funktion">Funktion</a></li>
@@ -624,117 +838,129 @@
     <main>
         <section id="hero" class="hero">
             <div class="container">
-                 <h1>Wissen statt schätzen.</h1>
-                 <p class="lead">Unser brandneues Messgerät U-Check Glas liefert präzise U<sub>g</sub>-Werte direkt vor Ort – einfach, schnell und kosteneffizient. Fundierte Sanierungsentscheidungen!</p>
-                 <a href="#vorbestellen" class="cta-button">Jetzt kaufen / unterstützen</a>
-                 </div>
+                <h1>Wissen statt schätzen.</h1>
+                <p class="lead">Unser brandneues Messgerät U-Check Glas liefert präzise U<sub>g</sub>-Werte direkt vor Ort – einfach, schnell und kosteneffizient. Fundierte Sanierungsentscheidungen!</p>
+                <a href="#vorbestellen" class="cta-button" id="hero-cta-main">Jetzt kaufen / unterstützen</a>
+            </div>
         </section>
 
         <section id="problem"> <div class="container">
-                <h2>Das <span class="gradient-text">Problem</span>: Ungewissheit kostet bares Geld</h2>
-                <div class="problem-solution-grid">
-                    <div class="problem-section-points">
-                        <h3>Grobe Schätzungen statt Fakten</h3>
-                        <p>Der U-Wert eines Fensters wird oft nur anhand des Baujahrs geschätzt oder ist unbekannt. Alterung, wie der unbemerkte Verlust der Edelgasfüllung im Scheibenzwischenraum, kann den realen Wert jedoch drastisch verschlechtern – <strong>bis zur Verdreifachung des Wärmeverlusts!</strong></p>
-                        <h3>Preisintensiv, unhandlich, nicht smart</h3>
-                        <p>Bestehende Messgeräte sind oft teuer, kommen in unhandlichen Koffern und sind selten "smart" im Sinne einer einfachen Bedienung ohne zusätzliche Apps oder aufwändige Einrichtung.</p>
-                        <h3>Fehlende Daten, falsche Entscheidungen</h3>
-                        <p>Ohne genaue Messung besteht die Gefahr, intakte Fenster unnötig auszutauschen. Selbst noch nicht so alte Fenster, bei denen die Edelgasfüllung bereits entwichen ist, sind von außen nicht zu erkennen. Ob es den Fenstern tatsächlich gut geht, bekommt man nur mithilfe einer Messung heraus, da der Edelgas- bzw. Wärmeverlust nur messtechnisch sichtbar wird.</p>
-
-                        <div class="waermebild-info">
-                            <h4>Wärmebildkameras & Fenster?</h4>
-                             <p>Wärmebildkameras sind ein tolles Werkzeug für qualitative Aussagen zur Gebäudehülle (z.B. am Mauerwerk). Für Fenster sind sie zur U-Wert-Bestimmung jedoch nicht sinnvoll einsetzbar. Starke Reflexionen der Umgebung (z.B. Spiegelung des kalten Himmels) verfälschen die Oberflächentemperaturmessung erheblich, was zu unzuverlässigen Daten führt.</p>
-                        </div>
-                    </div>
-                    <div>
-                        <img src="img/Gebaeudethermografie_Fachwerk.png" alt="Thermografie eines Fachwerkhauses mit Wärmeverlusten an Fenstern">
-                         <small class="problem-image-caption">Wärmeverluste (rot/gelb) an Fenstern machen einen großen Teil der Heizkosten aus.</small>
+            <h2>Das <span class="gradient-text">Problem</span>: Ungewissheit kostet bares Geld</h2>
+            <div class="problem-solution-grid">
+                <div class="problem-section-points">
+                    <h3>Grobe Schätzungen statt Fakten</h3>
+                    <p>Der U-Wert eines Fensters wird oft nur anhand des Baujahrs geschätzt oder ist unbekannt. Alterung, wie der unbemerkte Verlust der Edelgasfüllung im Scheibenzwischenraum, kann den realen Wert jedoch drastisch verschlechtern – <strong>bis zur Verdreifachung des Wärmeverlusts!</strong></p>
+                    <h3>Preisintensiv, unhandlich, nicht smart</h3>
+                    <p>Bestehende Messgeräte sind oft teuer, kommen in unhandlichen Koffern und sind selten "smart" im Sinne einer einfachen Bedienung ohne zusätzliche Apps oder aufwändige Einrichtung.</p>
+                    <h3>Fehlende Daten, falsche Entscheidungen</h3>
+                    <p>Ohne genaue Messung besteht die Gefahr, intakte Fenster unnötig auszutauschen. Selbst noch nicht so alte Fenster, bei denen die Edelgasfüllung bereits entwichen ist, sind von außen nicht zu erkennen. Ob es den Fenstern tatsächlich gut geht, bekommt man nur mithilfe einer Messung heraus, da der Edelgas- bzw. Wärmeverlust nur messtechnisch sichtbar wird.</p>
+                    <div class="waermebild-info">
+                        <h4>Wärmebildkameras & Fenster?</h4>
+                        <p>Wärmebildkameras sind ein tolles Werkzeug für qualitative Aussagen zur Gebäudehülle (z.B. am Mauerwerk). Für Fenster sind sie zur U-Wert-Bestimmung jedoch nicht sinnvoll einsetzbar. Starke Reflexionen der Umgebung (z.B. Spiegelung des kalten Himmels) verfälschen die Oberflächentemperaturmessung erheblich, was zu unzuverlässigen Daten führt.</p>
                     </div>
                 </div>
+                <div>
+                    <picture>
+                        <source srcset="img/Gebaeudethermografie_Fachwerk.avif" type="image/avif">
+                        <source srcset="img/Gebaeudethermografie_Fachwerk.webp" type="image/webp">
+                        <img class="lazy"
+                             src="img/placeholder-fachwerk-low.png" /* Low-res placeholder */
+                             data-src="img/Gebaeudethermografie_Fachwerk.png"
+                             alt="Thermografie eines Fachwerkhauses mit Wärmeverlusten an Fenstern"
+                             width="600" /* SET REAL WIDTH */
+                             height="400" /* SET REAL HEIGHT */
+                             loading="lazy"> /* Native fallback */
+                    </picture>
+                    <small class="problem-image-caption">Wärmeverluste (rot/gelb) an Fenstern machen einen großen Teil der Heizkosten aus.</small>
+                </div>
             </div>
+        </div>
         </section>
 
         <section id="solution" class="subtle-gradient-bg">
             <div class="container">
-                 <h2>Die <span class="gradient-text">Lösung</span>: U-Check Glas</h2>
+                <h2>Die <span class="gradient-text">Lösung</span>: U-Check Glas</h2>
                 <div class="problem-solution-grid">
-                     <div>
-                        <img src="img/geraet-perspektive.png" alt="U-Check Glas Messgerät Prototyp">
-                        <small style="display:block; text-align:center; color: var(--text-muted); margin-top: 10px;">Prototyp des U-Check Glas.</small>
-                     </div>
                     <div>
-                         <h3>Präzise & Bezahlbar</h3>
+                        <picture>
+                          <source srcset="img/geraet-perspektive.avif" type="image/avif">
+                          <source srcset="img/geraet-perspektive.webp" type="image/webp">
+                          <img class="lazy"
+                               src="img/placeholder-geraet-low.png" /* Low-res placeholder */
+                               data-src="img/geraet-perspektive.png"
+                               alt="U-Check Glas Messgerät Prototyp"
+                               width="500" /* SET REAL WIDTH */
+                               height="500" /* SET REAL HEIGHT */
+                               loading="lazy"> /* Native fallback */
+                        </picture>
+                        <small style="display:block; text-align:center; color: var(--text-muted); margin-top: 10px;">Prototyp des U-Check Glas.</small>
+                    </div>
+                    <div>
+                        <h3>Präzise & Bezahlbar</h3>
                         <p>U-Check Glas misst den U<sub>g</sub>-Wert (Wärmedurchgangskoeffizient der Verglasung) zuverlässig direkt am Fenster. Trotz höchster Sensorgenauigkeit, smarter Auswertung und Technik liegt der Preis deutlich niedriger als bei möglichen Konkurrenzprodukten etablierter Marken.</p>
                         <h3>Kompakt & Benutzerfreundlich</h3>
                         <p>Das handliche Gerät wird einfach auf dem Fenstersims platziert. Die Sensoren werden mit den mitgelieferten, wärmeleitenden Aufklebern auf die Scheibe aufgebracht. Der gemessene U-Wert wird nach kurzer Zeit auf dem integrierten Display angezeigt.</p>
-                         <h3>Flexibel für Alle</h3>
+                        <h3>Flexibel für Alle</h3>
                         <p>Ideal für Energieberater, Fensterbauer, Architekten und Sachverständige. Aber auch perfekt für Bauherren, Hausverwaltungen oder Vermieter – dank Kauf- oder attraktivem Mietmodell.</p>
-                         <a href="#produkt-detail" class="cta-button secondary" style="margin-top: 20px;">Mehr zum Gerät</a>
-                         <a href="#vorbestellen" class="cta-button" style="margin-left: 15px;">Jetzt Interesse bekunden</a>
+                        <a href="#produkt-detail" class="cta-button secondary" id="solution-cta-more" style="margin-top: 20px;">Mehr zum Gerät</a>
+                        <a href="#vorbestellen" class="cta-button" id="solution-cta-interest" style="margin-left: 15px;">Jetzt Interesse bekunden</a>
                     </div>
                 </div>
             </div>
         </section>
 
         <section id="simulation-section">
-             <div class="container">
-                 <h2 class="text-center">Sind Ihre Fenster noch <span class="gradient-text">wirklich dicht</span>?</h2>
-                 <p class="lead text-center">Mit den Jahren kann das isolierende Edelgas (z.B. Argon) aus dem Scheibenzwischenraum entweichen. Das verschlechtert die Dämmwirkung erheblich! Simulieren Sie hier (vereinfacht für 2-fach Glas), wie sich der U-Wert ändert und was das für Ihre Heizkosten bedeutet:</p>
+            <div class="container">
+                <h2 class="text-center">Sind Ihre Fenster noch <span class="gradient-text">wirklich dicht</span>?</h2>
+                <p class="lead text-center">Mit den Jahren kann das isolierende Edelgas (z.B. Argon) aus dem Scheibenzwischenraum entweichen. Das verschlechtert die Dämmwirkung erheblich! Simulieren Sie hier (vereinfacht für 2-fach Glas), wie sich der U-Wert ändert und was das für Ihre Heizkosten bedeutet:</p>
 
-                 <div class="simulation-container">
-                     <div class="svg-container">
-                         <h4 style="margin-bottom: 15px;">Wärmefluss-Visualisierung</h4>
-                         <svg id="window-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                            <polygon class="window-frame-polygon" points="10,0 90,0 95,100 5,100"/>
+                <div class="simulation-container">
+                    <div class="svg-container">
+                        <h4 style="margin-bottom: 15px;">Wärmefluss-Visualisierung</h4>
+                        <svg id="window-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"> <polygon class="window-frame-polygon" points="10,0 90,0 95,100 5,100"/>
                             <polygon class="window-glass-polygon" points="30,5 35,5 40,95 25,95"/>
-                             <polygon class="window-gap-polygon" points="35,5 65,5 70,95 40,95"/>
-                             <polygon class="window-glass-polygon" points="65,5 70,5 75,95 60,95"/>
+                            <polygon class="window-gap-polygon" points="35,5 65,5 70,95 40,95"/>
+                            <polygon class="window-glass-polygon" points="65,5 70,5 75,95 60,95"/>
                             <g id="particles">
                                 <circle class="heat-particle" cx="0" cy="15"/> <circle class="heat-particle" cx="0" cy="25"/>
                                 <circle class="heat-particle" cx="0" cy="35"/> <circle class="heat-particle" cx="0" cy="45"/>
                                 <circle class="heat-particle" cx="0" cy="55"/> <circle class="heat-particle" cx="0" cy="65"/>
                                 <circle class="heat-particle" cx="0" cy="75"/> <circle class="heat-particle" cx="0" cy="85"/>
                             </g>
-                             <text x="82" y="50" font-size="8" fill="var(--text-muted)" transform="rotate(90, 82, 50)">Innen (Warm)</text>
+                            <text x="82" y="50" font-size="8" fill="var(--text-muted)" transform="rotate(90, 82, 50)">Innen (Warm)</text>
                             <text x="18" y="50" font-size="8" fill="var(--text-muted)" transform="rotate(-90, 18, 50)">Außen (Kalt)</text>
-                         </svg>
-                         <p id="animation-comment">Geringer Wärmefluss</p>
-                     </div>
-                     <div class="controls-explanation-container">
-                         <h4 style="margin-bottom: 10px;">Gasverlust simulieren:</h4>
-                         <label for="argon-slider" style="font-weight: 500; color: var(--text-muted); font-size: 0.95rem; display: block; margin-bottom: 5px;">Edelgasfüllstand (100% = Intakt, 0% = Nur Luft):</label>
-                         <input type="range" id="argon-slider" class="slider" min="0" max="100" value="90" step="5">
-                         <div class="slider-labels">
-                             <span>Viel Verlust / Nur Luft</span>
-                             <span>Wenig Verlust / Intakt</span>
-                         </div>
-                         <div class="u-wert-output-area">
-                             <label>Resultierender U<sub>g</sub>-Wert (ca.):</label>
-                             <span id="u-value-output">1.1 W/(m²·K)</span>
-                             <span id="u-value-comment">Gute Dämmung.</span>
-                         </div>
-                         <div id="cost-savings-text">
-                             <strong style="color: var(--text-light);">Potenzielle Heizkostenersparnis:</strong><br>
-                             Ein Fenster mit dem aktuell simulierten U<sub>g</sub>-Wert von <strong id="cost-u-value">1.1</strong> spart gegenüber einem Fenster mit komplettem Gasverlust (U<sub>g</sub> <strong id="cost-u-value-bad">2.7</strong>) bei <strong id="cost-area">[XX] m²</strong> Fensterfläche pro Jahr ca. <strong><span id="calculated-savings">[XX]</span> €</strong>!
-                             <small>
-                                 Berechnung: Ersparnis [€/a] ≈ (U<sub>g,schlecht</sub> - U<sub>g,aktuell</sub>) * Fläche [m²] * Heizgradtage [Kd/a] * 24 [h/d] / 1000 * Energiepreis [€/kWh]. <br>
-                                 Annahmen: Fläche=<span class="calc-param" id="param-area">25</span> m², Heizgradtage=<span class="calc-param" id="param-hdd">3500</span> Kd/a, Energiepreis=<span class="calc-param" id="param-price">12</span> ct/kWh.
-                             </small>
-                         </div>
-                         <div id="explanation-box">
-                             <strong>Was zeigt das?</strong> Je weniger Edelgas (Regler nach links), desto höher der U-Wert (schlechtere Dämmung) und desto schneller/mehr Wärme (<span style="color:var(--accent-red)">rote</span>/<span style="color:var(--accent-orange)">orange</span> Partikel) geht durch das Fenster verloren und kommt <span style="color:var(--accent-blue)">kalt</span> außen an. U-Check Glas misst den *echten* Wert für Ihr Fenster!
-                         </div>
-                     </div>
-                     <div id="info-toggle" title="Erklärung ein-/ausblenden" role="button" aria-controls="explanation-box" aria-expanded="false">❓</div>
-                 </div>
-                 <p style="margin-top: 40px; text-align: center;">Unsicherheit über den wahren Zustand Ihrer Fenster kostet bares Geld durch unnötige Heizkosten oder Fehlinvestitionen. <br><strong>U-Check Glas schafft Klarheit.</strong></p>
-             </div>
-         </section>
+                        </svg>
+                        <p id="animation-comment" aria-live="polite">Geringer Wärmefluss</p> </div>
+                    <div class="controls-explanation-container">
+                        <h4 style="margin-bottom: 10px;">Gasverlust simulieren:</h4>
+                        <label for="argon-slider" style="font-weight: 500; color: var(--text-muted); font-size: 0.95rem; display: block; margin-bottom: 5px;">Edelgasfüllstand (100% = Intakt, 0% = Nur Luft):</label>
+                        <input type="range" id="argon-slider" class="slider" min="0" max="100" value="90" step="5">
+                        <div class="slider-labels" aria-hidden="true"> <span>Viel Verlust / Nur Luft</span>
+                            <span>Wenig Verlust / Intakt</span>
+                        </div>
+                        <div class="u-wert-output-area">
+                            <label for="u-value-output">Resultierender U<sub>g</sub>-Wert (ca.):</label>
+                            <output id="u-value-output" for="argon-slider">1.1 W/(m²·K)</output> <span id="u-value-comment" aria-live="polite">Gute Dämmung.</span> </div>
+                        <div id="cost-savings-text">
+                            <strong style="color: var(--text-light);">Potenzielle Heizkostenersparnis:</strong><br>
+                            Ein Fenster mit dem aktuell simulierten U<sub>g</sub>-Wert von <strong id="cost-u-value">1.1</strong> spart gegenüber einem Fenster mit komplettem Gasverlust (U<sub>g</sub> <strong id="cost-u-value-bad">2.7</strong>) bei <strong id="cost-area">[XX] m²</strong> Fensterfläche pro Jahr ca. <strong><span id="calculated-savings">[XX]</span> €</strong>!
+                            <small>
+                                Berechnung: Ersparnis [€/a] ≈ (U<sub>g,schlecht</sub> - U<sub>g,aktuell</sub>) * Fläche [m²] * Heizgradtage [Kd/a] * 24 [h/d] / 1000 * Energiepreis [€/kWh]. <br>
+                                Annahmen: Fläche=<span class="calc-param" id="param-area">25</span> m², Heizgradtage=<span class="calc-param" id="param-hdd">3500</span> Kd/a, Energiepreis=<span class="calc-param" id="param-price">12</span> ct/kWh.
+                            </small>
+                        </div>
+                        <div id="explanation-box" role="region" aria-labelledby="info-toggle-label" aria-hidden="true"> <span id="info-toggle-label" hidden>Erklärung zur Simulation</span> <strong>Was zeigt das?</strong> Je weniger Edelgas (Regler nach links), desto höher der U-Wert (schlechtere Dämmung) und desto schneller/mehr Wärme (<span style="color:var(--accent-red)">rote</span>/<span style="color:var(--accent-orange)">orange</span> Partikel) geht durch das Fenster verloren und kommt <span style="color:var(--accent-blue)">kalt</span> außen an. U-Check Glas misst den *echten* Wert für Ihr Fenster!
+                        </div>
+                    </div>
+                    <button id="info-toggle" title="Erklärung ein-/ausblenden" aria-controls="explanation-box" aria-expanded="false">❓</button> </div>
+                <p style="margin-top: 40px; text-align: center;">Unsicherheit über den wahren Zustand Ihrer Fenster kostet bares Geld durch unnötige Heizkosten oder Fehlinvestitionen. <br><strong>U-Check Glas schafft Klarheit.</strong></p>
+            </div>
+        </section>
 
-         <section id="funktion">
-            <div class="container">
+        <section id="funktion">
+             <div class="container">
                  <h2 class="text-center">Wie <span class="gradient-text">U-Check Glas</span> misst</h2>
-                <div class="how-it-works-content">
+                 <div class="how-it-works-content">
                      <div>
                          <h3>Das Prinzip: Wärme & Temperatur</h3>
                          <p>U-Check Glas misst drei Schlüsselwerte direkt an der Glasscheibe, um den Wärmedurchgang zu quantifizieren:</p>
@@ -746,16 +972,14 @@
                          <p>Dafür nutzen wir präzise, kalibrierte digitale Temperatursensoren (DS18B20) für T<sub>si</sub> und T<sub>se</sub>. Der Wärmestrom 'q' wird über ein differenzielles Temperaturmessverfahren mittels eines weiteren Sensors und einer definierten thermischen Barriere gemessen (vereinfacht gesagt: ein bekanntes, dünnes Material zwischen zwei Temperatursensoren).</p>
                          <h3>Die Berechnung</h3>
                          <p>Aus diesen live gemessenen Werten und den physikalisch bekannten Wärmeübergangswiderständen der Luft an den Glasoberflächen (r<sub>si</sub> innen und r<sub>se</sub> außen, die leicht von den Lufttemperaturen abhängen, aber gut normiert sind) berechnet der integrierte Mikrocontroller den U<sub>g</sub>-Wert nach der fundamentalen Formel:</p>
-                         <p class="formula">U<sub>g</sub> = 1 / (R<sub>si</sub> + R<sub>Glas</sub> + R<sub>se</sub>)</p>
-                         <p>Wobei R<sub>Glas</sub> = (T<sub>si</sub> - T<sub>se</sub>) / q der gemessene Widerstand der Verglasung ist.</p>
+                         <p class="formula" aria-label="Formel U-Wert Glas gleich 1 geteilt durch Summe von Rsi plus Rglas plus Rse">U<sub>g</sub> = 1 / (R<sub>si</sub> + R<sub>Glas</sub> + R<sub>se</sub>)</p> <p>Wobei R<sub>Glas</sub> = (T<sub>si</sub> - T<sub>se</sub>) / q der gemessene Widerstand der Verglasung ist.</p>
                          <p>Das Ergebnis (der U<sub>g</sub>-Wert) wird nach Erreichen stabiler Bedingungen direkt auf dem Gerätedisplay angezeigt.</p>
                      </div>
                      <div class="measurement-schematic">
-                         <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
-                             <defs> <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"> <polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-red)" /> </marker> </defs>
+                         <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"> <defs> <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"> <polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-red)" /> </marker> </defs>
                              <rect x="130" y="10" width="50" height="130" fill="rgba(233, 78, 119, 0.08)" /> <text x="150" y="145" class="temp-label">R_si (Innen)</text>
                              <rect x="20" y="10" width="50" height="130" fill="rgba(58, 123, 213, 0.08)" /> <text x="35" y="145" class="temp-label">R_se (Außen)</text>
-                            <rect x="70" y="10" width="8" height="130" class="glass-pane"/> <rect x="122" y="10" width="8" height="130" class="glass-pane"/>
+                             <rect x="70" y="10" width="8" height="130" class="glass-pane"/> <rect x="122" y="10" width="8" height="130" class="glass-pane"/>
                              <circle cx="74" cy="70" r="5" class="sensor-schematic" /> <text x="45" y="60" class="temp-label">T_se</text> <line x1="55" y1="65" x2="71" y2="70" stroke="var(--text-muted)" stroke-width="1" />
                              <circle cx="126" cy="80" r="5" class="sensor-schematic" /> <text x="145" y="95" class="temp-label">T_si</text> <line x1="140" y1="90" x2="129" y2="82" stroke="var(--text-muted)" stroke-width="1" />
                               <rect x="90" y="70" width="20" height="15" fill="rgba(255,255,255,0.1)" rx="2"/> <line x1="85" y1="77.5" x2="115" y2="77.5" class="arrow"/> <text x="97" y="95" class="flux-label">q</text>
@@ -763,113 +987,134 @@
                          </svg>
                          <small style="display:block; text-align:center; color: var(--text-muted); margin-top: 10px;">Schematische Darstellung der Messgrößen (Beispiel 2-fach Glas)</small>
                      </div>
-                </div>
-            </div>
-         </section>
+                 </div>
+             </div>
+        </section>
 
         <section id="produkt-detail">
             <div class="container">
                 <h2 class="text-center">Ein Blick auf <span class="gradient-text">U-Check Glas</span></h2>
-                 <div class="product-grid">
-                     <div>
-                         <p class="lead" style="text-align: left;">Kompakt, robust und bereit für den Einsatz. Das Gehäuse wird im 3D-Druck gefertigt, die Elektronik basiert auf einem leistungsfähigen ESP32 Mikrocontroller.</p>
-                         <ul>
+                <div class="product-grid">
+                    <div>
+                        <p class="lead" style="text-align: left;">Kompakt, robust und bereit für den Einsatz. Das Gehäuse wird im 3D-Druck gefertigt, die Elektronik basiert auf einem leistungsfähigen ESP32 Mikrocontroller.</p>
+                        <ul>
                             <li>Integriertes OLED-Display zur direkten Anzeige</li>
                             <li>Magnetische Halterung für einfache Befestigung</li>
                             <li>Stromversorgung via USB-C (Powerbank oder Netzteil)</li>
                             <li>Kompakte Maße: ca. 10 x 6 x 4 cm</li>
-                         </ul>
-                         <a href="#vorbestellen" class="cta-button" style="margin-top: 15px;">Verfügbarkeit anfragen</a>
-                     </div>
-                     <div>
-                         <img src="img/geraet-seite-vorne.png" alt="U-Check Glas Prototyp Seitenansicht" class="product-image-static">
-                         <small style="display:block; text-align:center; color: var(--text-muted); margin-top: 10px;">Aktueller Prototyp. Finale Produktbilder folgen.</small>
-                     </div>
-                 </div>
+                        </ul>
+                        <a href="#vorbestellen" class="cta-button" id="product-cta-availability" style="margin-top: 15px;">Verfügbarkeit anfragen</a>
+                    </div>
+                    <div>
+                        <picture>
+                             <source srcset="img/geraet-seite-vorne.avif" type="image/avif">
+                             <source srcset="img/geraet-seite-vorne.webp" type="image/webp">
+                             <img class="lazy product-image-static"
+                                  src="img/placeholder-geraet-seite-low.png" /* Low-res placeholder */
+                                  data-src="img/geraet-seite-vorne.png"
+                                  alt="U-Check Glas Prototyp Seitenansicht"
+                                  width="500" /* SET REAL WIDTH */
+                                  height="400" /* SET REAL HEIGHT */
+                                  loading="lazy"> /* Native fallback */
+                        </picture>
+                        <small style="display:block; text-align:center; color: var(--text-muted); margin-top: 10px;">Aktueller Prototyp. Finale Produktbilder folgen.</small>
+                    </div>
+                </div>
                 <h3 class="text-center" style="margin-top: 80px;">Interaktive 3D Ansicht</h3>
                 <p class="text-center" style="color: var(--text-muted); max-width: 700px; margin-left:auto; margin-right: auto;">Erkunden Sie das U-Check Glas Modell. (Laden des Modells kann kurz dauern).</p>
-                <div id="threejs-container"> </div>
-                 <div class="placeholder-notice" style="margin: -20px auto 20px auto;">
-                     **3D Modell:** Drehen mit Maus/Touch. Zoom mit Mausrad/Pinch.
-                 </div>
+                <div id="threejs-container" aria-label="Interaktives 3D Modell des U-Check Glas Geräts">
+                    <div id="threejs-loading-progress"></div> </div>
+                <div class="placeholder-notice" style="margin: -20px auto 20px auto;">
+                    <strong>3D Modell:</strong> Drehen mit Maus/Touch. Zoom mit Mausrad/Pinch.
+                </div>
             </div>
-         </section>
+        </section>
 
-         <section id="vorteile" class="subtle-gradient-bg">
-              <div class="container">
-                <h2 class="text-center">Ihre <span class="gradient-text">Vorteile</span> mit U-Check Glas</h2>
-                 <ul class="advantages-list">
-                     <li><strong>Klarheit statt Schätzung:</strong> Messen Sie den echten U<sub>g</sub>-Wert Ihrer Fenster und treffen Sie fundierte Sanierungsentscheidungen. Wissen, wo sich ein Austausch wirklich lohnt!</li>
-                     <li><strong>Massiv günstiger:</strong> Geplanter Verkaufspreis von ca. €300-€600 – sparen Sie tausende Euro im Vergleich zu etablierten Labormessgeräten oder teuren Profi-Tools.</li>
-                     <li><strong>Einfachste Bedienung:</strong> Anbringen, einschalten, kurz warten, Wert ablesen. Kein Expertenwissen oder zusätzliche App nötig.</li>
-                     <li><strong>Schnelle Ergebnisse vor Ort:</strong> Der U-Wert wird direkt am Objekt berechnet und angezeigt.</li>
-                     <li><strong>Mobil & Flexibel:</strong> Kompaktes Design, Betrieb mit Standard-USB-C-Powerbank möglich.</li>
-                     <li><strong>Mietmodell verfügbar:</strong> Testen oder nutzen Sie U-Check Glas flexibel für einzelne Projekte, ohne hohe Anfangsinvestition. (Siehe unten)</li>
-                     <li><strong>Wertvolles Tool für Profis:</strong> Energieberater, Fensterbauer, Architekten und Gutachter können ihr Angebot erweitern, sich differenzieren und präzisere Aussagen treffen.</li>
-                 </ul>
-                 <div class="text-center" style="margin-top: 50px;">
-                     <a href="#vorbestellen" class="cta-button">Interesse am Kauf?</a>
-                     <a href="#mieten" class="cta-button secondary" style="margin-left: 15px;">Mehr zum Mieten</a>
-                 </div>
-            </div>
-         </section>
-
-         <section id="mieten">
+        <section id="vorteile" class="subtle-gradient-bg">
             <div class="container">
-                 <h2 class="text-center">Flexibel <span class="gradient-text">nutzen</span>: Kaufen oder Mieten</h2>
-                 <div class="info-grid">
-                     <div class="info-box">
-                         <h3>U-Check Glas Mieten</h3>
-                         <p>Sie brauchen das Gerät nur für ein spezifisches Bauprojekt, zur Überprüfung Ihrer Mietwohnung oder möchten es erstmal ausgiebig testen? Unser attraktives Mietmodell macht es möglich!</p>
-                         <p>Einfach online für den gewünschten Zeitraum buchen (bald verfügbar!), Messungen durchführen und bequem im mitgelieferten, vorfrankierten Karton zurücksenden. Ideal für Hausbesitzer, Mieter und sporadische Nutzer.</p>
-                         <a href="#vorbestellen" class="cta-button secondary" style="margin-top:15px;">Interesse am Mietmodell bekunden</a>
-                     </div>
-                      <div class="info-box">
-                         <h3>Fördermittel & Nachweise</h3>
-                         <p>Wussten Sie schon? Genaue U-Wert-Messungen können entscheidend sein, um den Erfolg von Sanierungsmaßnahmen (z.B. Fenstertausch) nachzuweisen. Dies kann relevant für die Beantragung oder den Nachweis von Fördermitteln (z.B. von BAFA oder KfW) sein.</p>
-                          <p>U-Check Glas liefert Ihnen die nötigen, objektiven Daten für Ihre Dokumentation.</p>
-                         <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">*Bitte informieren Sie sich stets über die aktuell gültigen Förderbedingungen und Anforderungen bei den jeweiligen Stellen. Dies stellt keine Förderberatung dar.</p>
-                     </div>
-                 </div>
+                <h2 class="text-center">Ihre <span class="gradient-text">Vorteile</span> mit U-Check Glas</h2>
+                <ul class="advantages-list">
+                    <li><strong>Klarheit statt Schätzung:</strong> Messen Sie den echten U<sub>g</sub>-Wert Ihrer Fenster und treffen Sie fundierte Sanierungsentscheidungen. Wissen, wo sich ein Austausch wirklich lohnt!</li>
+                    <li><strong>Massiv günstiger:</strong> Geplanter Verkaufspreis von ca. €300-€600 – sparen Sie tausende Euro im Vergleich zu etablierten Labormessgeräten oder teuren Profi-Tools.</li>
+                    <li><strong>Einfachste Bedienung:</strong> Anbringen, einschalten, kurz warten, Wert ablesen. Kein Expertenwissen oder zusätzliche App nötig.</li>
+                    <li><strong>Schnelle Ergebnisse vor Ort:</strong> Der U-Wert wird direkt am Objekt berechnet und angezeigt.</li>
+                    <li><strong>Mobil & Flexibel:</strong> Kompaktes Design, Betrieb mit Standard-USB-C-Powerbank möglich.</li>
+                    <li><strong>Mietmodell verfügbar:</strong> Testen oder nutzen Sie U-Check Glas flexibel für einzelne Projekte, ohne hohe Anfangsinvestition. (Siehe unten)</li>
+                    <li><strong>Wertvolles Tool für Profis:</strong> Energieberater, Fensterbauer, Architekten und Gutachter können ihr Angebot erweitern, sich differenzieren und präzisere Aussagen treffen.</li>
+                </ul>
+                <div class="text-center" style="margin-top: 50px;">
+                    <a href="#vorbestellen" class="cta-button" id="advantages-cta-buy">Interesse am Kauf?</a>
+                    <a href="#mieten" class="cta-button secondary" id="advantages-cta-rent" style="margin-left: 15px;">Mehr zum Mieten</a>
+                </div>
             </div>
-         </section>
+        </section>
+
+        <section id="mieten">
+            <div class="container">
+                <h2 class="text-center">Flexibel <span class="gradient-text">nutzen</span>: Kaufen oder Mieten</h2>
+                <div class="info-grid">
+                    <div class="info-box">
+                        <h3>U-Check Glas Mieten</h3>
+                        <p>Sie brauchen das Gerät nur für ein spezifisches Bauprojekt, zur Überprüfung Ihrer Mietwohnung oder möchten es erstmal ausgiebig testen? Unser attraktives Mietmodell macht es möglich!</p>
+                        <p>Einfach online für den gewünschten Zeitraum buchen (bald verfügbar!), Messungen durchführen und bequem im mitgelieferten, vorfrankierten Karton zurücksenden. Ideal für Hausbesitzer, Mieter und sporadische Nutzer.</p>
+                        <a href="#vorbestellen" class="cta-button secondary" id="rent-cta-interest" style="margin-top:15px;">Interesse am Mietmodell bekunden</a>
+                    </div>
+                     <div class="info-box">
+                        <h3>Fördermittel & Nachweise</h3>
+                        <p>Wussten Sie schon? Genaue U-Wert-Messungen können entscheidend sein, um den Erfolg von Sanierungsmaßnahmen (z.B. Fenstertausch) nachzuweisen. Dies kann relevant für die Beantragung oder den Nachweis von Fördermitteln (z.B. von BAFA oder KfW) sein.</p>
+                        <p>U-Check Glas liefert Ihnen die nötigen, objektiven Daten für Ihre Dokumentation.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">*Bitte informieren Sie sich stets über die aktuell gültigen Förderbedingungen und Anforderungen bei den jeweiligen Stellen. Dies stellt keine Förderberatung dar.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <section id="team" class="subtle-gradient-bg">
-            <div class="container team-container">
-                <h2>Das <span class="gradient-text">Team</span> dahinter</h2>
-                <p class="lead">Entwickelt aus der Praxis für die Praxis – mit Leidenschaft für Energieeffizienz und zugängliche Messtechnik.</p>
-                <div class="team-members">
-                    <div class="team-member">
-                        <img src="img/christoph-hauser.png" alt="Foto von Christoph Samuel Hauser">
-                        <h4>Christoph Samuel Hauser</h4>
-                        <p>M.Sc. Gebäudephysik (HFT Stuttgart)<br>Konzeption, Entwicklung & Prototypenbau</p>
-                    </div>
-                    <div class="team-member">
-                         <img src="img/sensoren-magnetisch.png" alt="Symbol für Elektronikpartner"> <h4>Unterstützende Partner</h4>
-                        <p>Beratung im Bereich Embedded Systems, Elektronik & Software</p>
+             <div class="container team-container">
+                 <h2>Das <span class="gradient-text">Team</span> dahinter</h2>
+                 <p class="lead">Entwickelt aus der Praxis für die Praxis – mit Leidenschaft für Energieeffizienz und zugängliche Messtechnik.</p>
+                 <div class="team-members">
+                     <div class="team-member">
+                        <picture>
+                             <source srcset="img/christoph-hauser.avif" type="image/avif">
+                             <source srcset="img/christoph-hauser.webp" type="image/webp">
+                             <img class="lazy"
+                                  src="img/placeholder-person-low.png" /* Low-res placeholder */
+                                  data-src="img/christoph-hauser.png"
+                                  alt="Foto von Christoph Samuel Hauser"
+                                  width="130" height="130" loading="lazy">
+                        </picture>
+                         <h4>Christoph Samuel Hauser</h4>
+                         <p>M.Sc. Gebäudephysik (HFT Stuttgart)<br>Konzeption, Entwicklung & Prototypenbau</p>
+                     </div>
+                     <div class="team-member">
+                         <img src="img/sensoren-magnetisch.png" alt="Symbol für Elektronikpartner" width="130" height="130">
+                         <h4>Unterstützende Partner</h4>
+                         <p>Beratung im Bereich Embedded Systems, Elektronik & Software</p>
                      </div>
                  </div>
                  <div style="margin-top: 40px;">
-                    <p>Haben Sie Fragen oder möchten Sie das Projekt unterstützen?</p>
-                    <a href="mailto:info@u-check.online" class="cta-button secondary">Kontakt aufnehmen</a>
+                     <p>Haben Sie Fragen oder möchten Sie das Projekt unterstützen?</p>
+                     <a href="mailto:info@u-check.online" class="cta-button secondary" id="team-cta-contact">Kontakt aufnehmen</a>
                  </div>
-            </div>
-         </section>
+             </div>
+        </section>
 
         <section id="vorbestellen">
             <div class="container text-center">
-                 <h2>Seien Sie <span class="gradient-text">unter den Ersten!</span></h2>
-                 <p class="lead">U-Check Glas befindet sich in der finalen Entwicklungsphase und wird bald verfügbar sein (Kauf & Miete). Hinterlassen Sie Ihre E-Mail-Adresse, und wir informieren Sie unverbindlich über den Verkaufsstart, exklusive Vorbestell-Aktionen und Neuigkeiten.</p>
-                 <form id="preorder-form" class="preorder-form" action="https://formspree.io/f/DEIN_FORMSPREE_ENDPOINT" method="POST">
-                     <label for="email-input">Ihre E-Mail-Adresse:</label>
-                     <input id="email-input" type="email" name="email" placeholder="max.mustermann@email.de" required>
-                     <input type="text" name="_gotcha" style="display:none">
-                     <input type="hidden" name="_subject" value="Neue Interessebekundung für U-Check Glas!">
-                    <button type="submit" class="cta-button">Benachrichtigen Sie mich!</button>
-                     <div id="form-response"></div> </form>
-                 <p style="margin-top: 30px; font-size: 0.9rem; color: var(--text-muted);">Ihre Daten werden nur für die Benachrichtigung zum U-Check Glas verwendet. Kein Spam, keine Weitergabe. Versprochen.</p>
+                <h2>Seien Sie <span class="gradient-text">unter den Ersten!</span></h2>
+                <p class="lead">U-Check Glas befindet sich in der finalen Entwicklungsphase und wird bald verfügbar sein (Kauf & Miete). Hinterlassen Sie Ihre E-Mail-Adresse, und wir informieren Sie unverbindlich über den Verkaufsstart, exklusive Vorbestell-Aktionen und Neuigkeiten.</p>
+                <form id="preorder-form" class="preorder-form" action="YOUR_FAAS_ENDPOINT_URL_HERE" method="POST">
+                    <label for="email-input">Ihre E-Mail-Adresse:</label>
+                    <input id="email-input" type="email" name="email" placeholder="max.mustermann@email.de" required autocomplete="email">
+                    <input type="text" name="_gotcha" style="display:none!important" tabindex="-1" autocomplete="off">
+                    <input type="hidden" name="_subject" value="Neue Interessebekundung für U-Check Glas!">
+                    <button type="submit" class="cta-button" id="preorder-submit-button">Benachrichtigen Sie mich!</button>
+                    <div id="form-response" role="status" aria-live="polite"></div>
+                </form>
+                <p style="margin-top: 30px; font-size: 0.9rem; color: var(--text-muted);">Ihre Daten werden nur für die Benachrichtigung zum U-Check Glas verwendet. Kein Spam, keine Weitergabe. Versprochen.</p>
             </div>
-         </section>
+        </section>
 
     </main>
 
@@ -881,7 +1126,7 @@
                 <a href="datenschutz.html">Datenschutz</a>
                 <a href="mailto:info@u-check.online">Kontakt</a>
             </div>
-        </div>
+            </div>
     </footer>
 
     <script type="importmap">
@@ -899,232 +1144,607 @@
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-        // --- Hamburger Menu ---
-        const menuToggle = document.getElementById('mobile-menu');
-        const navList = document.getElementById('nav-list');
+        document.addEventListener('DOMContentLoaded', function() {
 
-        if(menuToggle && navList) {
-            menuToggle.addEventListener('click', () => {
-                const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
-                menuToggle.setAttribute('aria-expanded', !isExpanded);
-                navList.classList.toggle('active');
-                // Optional: Change icon on toggle
-                const icon = menuToggle.querySelector('i');
-                if (icon) {
-                    icon.classList.toggle('fa-bars');
-                    icon.classList.toggle('fa-times'); // Assuming you want a close icon
-                }
-            });
+            // --- Hamburger Menu ---
+            const menuToggle = document.getElementById('mobile-menu');
+            const navList = document.getElementById('nav-list');
 
-            // Close menu when a link is clicked (optional)
-             navList.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (navList.classList.contains('active')) {
-                         menuToggle.click(); // Simulate click to close
+            if (menuToggle && navList) {
+                menuToggle.addEventListener('click', () => {
+                    const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+
+                    // Toggle visual classes for animations
+                    menuToggle.classList.toggle('open');
+                    navList.classList.toggle('active');
+
+                    // Update ARIA attributes for accessibility
+                    menuToggle.setAttribute('aria-expanded', !isExpanded);
+                    navList.setAttribute('aria-expanded', !isExpanded); // Keep in sync
+                    menuToggle.setAttribute('aria-label', !isExpanded ? 'Menü schließen' : 'Menü öffnen');
+
+                    // Optional: Trap focus within the menu when open (more advanced)
+                });
+
+                // Close menu when a link is clicked
+                navList.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (navList.classList.contains('active')) {
+                            menuToggle.click(); // Simulate click to close
+                        }
+                    });
+                });
+
+                // Close menu if user clicks outside of it (optional)
+                document.addEventListener('click', (event) => {
+                    if (navList.classList.contains('active') && !navList.contains(event.target) && !menuToggle.contains(event.target)) {
+                         menuToggle.click();
                     }
                 });
-            });
-        }
-
-
-        // --- Footer Jahr ---
-        document.getElementById('year').textContent = new Date().getFullYear();
-
-        // --- Interaktive U-Wert Simulation ---
-        const slider = document.getElementById('argon-slider');
-        const output = document.getElementById('u-value-output');
-        const comment = document.getElementById('u-value-comment');
-        const svgParticlesContainer = document.getElementById('particles');
-        const animationComment = document.getElementById('animation-comment');
-        const infoToggle = document.getElementById('info-toggle');
-        const explanationBox = document.getElementById('explanation-box');
-        const costUValueSpan = document.getElementById('cost-u-value');
-        const costUValueBadSpan = document.getElementById('cost-u-value-bad');
-        const costAreaSpan = document.getElementById('cost-area');
-        const calculatedSavingsSpan = document.getElementById('calculated-savings');
-        const costSavingsTextElement = document.getElementById('cost-savings-text');
-        const paramAreaSpan = document.getElementById('param-area');
-        const paramHddSpan = document.getElementById('param-hdd');
-        const paramPriceSpan = document.getElementById('param-price');
-
-        function updateHeatFlowAndCosts(argonLevel) {
-            const uValueLuft = 2.7; const uValueArgon90 = 1.1;
-            const t = Math.max(0, Math.min(1, argonLevel / 100));
-            const estimatedUValue = uValueLuft * (1 - t) + uValueArgon90 * t;
-            const currentUValue = estimatedUValue.toFixed(1);
-
-            if (output) output.textContent = currentUValue + " W/(m²·K)";
-            if (comment) {
-                if (estimatedUValue > 2.2) comment.textContent = "Hoher Wärmeverlust!";
-                else if (estimatedUValue > 1.6) comment.textContent = "Mäßiger Wärmeverlust.";
-                else comment.textContent = "Gute Dämmung.";
             }
 
-            const baseDuration = 5.0; const worstDuration = 1.8;
-            const durationRange = baseDuration - worstDuration;
-            const uValueRange = uValueLuft - uValueArgon90;
-            const animationDuration = baseDuration - ((estimatedUValue - uValueArgon90) / uValueRange) * durationRange;
-            const limitedDuration = Math.max(worstDuration, Math.min(baseDuration, animationDuration));
 
-            if (svgParticlesContainer) {
-                const particles = svgParticlesContainer.querySelectorAll('.heat-particle');
-                particles.forEach(p => {
-                    const randomFactor = 0.9 + Math.random() * 0.2;
-                    p.style.animationDuration = `${limitedDuration * randomFactor}s`;
-                });
+            // --- Footer Year ---
+            const yearSpan = document.getElementById('year');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
             }
-            if (animationComment) {
-                if (estimatedUValue > 2.2) animationComment.textContent = "Hoher Wärmefluss";
-                else if (estimatedUValue > 1.6) animationComment.textContent = "Moderater Wärmefluss";
-                else animationComment.textContent = "Geringer Wärmefluss";
-            }
-            if (calculatedSavingsSpan && costSavingsTextElement) {
-                const avgWindowAreaTotal = parseFloat(paramAreaSpan?.textContent || 25);
-                const energyPrice = parseFloat(paramPriceSpan?.textContent || 12) / 100;
-                const heatingDegreeDays = parseFloat(paramHddSpan?.textContent || 3500);
-                const deltaU = uValueLuft - estimatedUValue;
-                const energySavingsKWh = Math.max(0, deltaU * avgWindowAreaTotal * heatingDegreeDays * 24 / 1000);
-                const costSavingsEuro = energySavingsKWh * energyPrice;
 
-                if(costUValueSpan) costUValueSpan.textContent = currentUValue;
-                if(costUValueBadSpan) costUValueBadSpan.textContent = uValueLuft.toFixed(1);
-                if(costAreaSpan) costAreaSpan.textContent = avgWindowAreaTotal;
-                if(calculatedSavingsSpan) calculatedSavingsSpan.textContent = costSavingsEuro.toFixed(0);
-                if(paramAreaSpan) paramAreaSpan.textContent = avgWindowAreaTotal;
-                if(paramHddSpan) paramHddSpan.textContent = heatingDegreeDays;
-                if(paramPriceSpan) paramPriceSpan.textContent = (energyPrice * 100).toFixed(0);
-            }
-        }
-        if (slider) {
-            slider.addEventListener('input', () => updateHeatFlowAndCosts(parseInt(slider.value)));
-            updateHeatFlowAndCosts(parseInt(slider.value));
-        }
-        if (infoToggle && explanationBox) {
-            infoToggle.addEventListener('click', () => {
-                const isVisible = explanationBox.style.display === 'block';
-                explanationBox.style.display = isVisible ? 'none' : 'block';
-                infoToggle.textContent = isVisible ? '❓' : '💡';
-                infoToggle.setAttribute('aria-expanded', !isVisible);
-                explanationBox.setAttribute('aria-hidden', String(isVisible));
-            });
-            explanationBox.setAttribute('aria-hidden', 'true');
-        }
+            // --- Interaktive U-Wert Simulation ---
+            const slider = document.getElementById('argon-slider');
+            const output = document.getElementById('u-value-output');
+            const comment = document.getElementById('u-value-comment');
+            const svgParticlesContainer = document.getElementById('particles');
+            const animationComment = document.getElementById('animation-comment');
+            const infoToggle = document.getElementById('info-toggle');
+            const explanationBox = document.getElementById('explanation-box');
+            const costUValueSpan = document.getElementById('cost-u-value');
+            const costUValueBadSpan = document.getElementById('cost-u-value-bad');
+            const costAreaSpan = document.getElementById('cost-area');
+            const calculatedSavingsSpan = document.getElementById('calculated-savings');
+            const costSavingsTextElement = document.getElementById('cost-savings-text');
+            const paramAreaSpan = document.getElementById('param-area');
+            const paramHddSpan = document.getElementById('param-hdd');
+            const paramPriceSpan = document.getElementById('param-price');
 
-        // --- Three.js Setup ---
-        const container3D = document.getElementById('threejs-container');
-        if (container3D) {
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x1a1a1a);
-            const camera = new THREE.PerspectiveCamera(50, container3D.clientWidth / container3D.clientHeight, 0.1, 1000);
-            camera.position.set(0.5, 0.6, 1.2);
-            const renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(container3D.clientWidth, container3D.clientHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.outputColorSpace = THREE.SRGBColorSpace;
-            container3D.appendChild(renderer.domElement);
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); scene.add(ambientLight);
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 2.0); directionalLight.position.set(2, 3, 2); directionalLight.castShadow = true; scene.add(directionalLight);
-            const pointLight = new THREE.PointLight(0xffffff, 0.4); pointLight.position.set(-2, 1, -2); scene.add(pointLight);
-            const loader = new GLTFLoader();
-            const loadingManager = new THREE.LoadingManager();
-             const progressBar = document.createElement('div'); progressBar.style.position = 'absolute'; progressBar.style.bottom = '10px'; progressBar.style.left = '10px'; progressBar.style.width = '0%'; progressBar.style.height = '5px'; progressBar.style.backgroundColor = 'var(--accent-blue)'; progressBar.style.transition = 'width 0.5s'; container3D.appendChild(progressBar);
-            loadingManager.onProgress = function ( url, itemsLoaded, itemsTotal ) { progressBar.style.width = ( itemsLoaded / itemsTotal * 100 ) + '%'; };
-            loadingManager.onLoad = function () { progressBar.style.width = '100%'; setTimeout(() => { progressBar.style.display = 'none'; }, 500); };
-            loader.setLoadingManager(loadingManager);
+            function updateHeatFlowAndCosts(argonLevel) {
+                const uValueLuft = 2.7; const uValueArgon90 = 1.1;
+                const t = Math.max(0, Math.min(1, argonLevel / 100));
+                // Use a non-linear interpolation for potentially more realistic simulation
+                const estimatedUValue = uValueLuft * Math.pow((1 - t), 1.5) + uValueArgon90 * (1 - Math.pow((1-t), 1.5));
+                // Original linear interpolation: const estimatedUValue = uValueLuft * (1 - t) + uValueArgon90 * t;
+                const currentUValue = estimatedUValue.toFixed(1);
 
-             // --- Adjusted Model Path ---
-             // Make sure the path is correct relative to your index.html
-            loader.load(
-                 'ThermoMetric.glb', // <-- KEEP THIS PATH (or update if your model is named differently or in a subfolder like 'models/ThermoMetric.glb')
-                 function (gltf) {
-                    const model = gltf.scene;
-                    model.traverse(function (node) { if (node.isMesh) { node.castShadow = true; node.receiveShadow = true; } });
-                    scene.add(model); console.log("3D Modell geladen.");
-                },
-                undefined,
-                function (error) {
-                    console.error('Fehler beim Laden des 3D-Modells:', error);
-                    const errorNotice = document.createElement('div'); errorNotice.textContent = '3D-Modell konnte nicht geladen werden.'; errorNotice.style.color = 'var(--accent-red)'; errorNotice.style.textAlign = 'center'; errorNotice.style.padding = '20px'; container3D.appendChild(errorNotice);
+                if (output) output.textContent = currentUValue + " W/(m²·K)";
+                if (comment) {
+                    let commentText = "Gute Dämmung.";
+                    if (estimatedUValue > 2.2) commentText = "Hoher Wärmeverlust!";
+                    else if (estimatedUValue > 1.6) commentText = "Mäßiger Wärmeverlust.";
+                    comment.textContent = commentText;
                 }
-            );
-            const controls = new OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true; controls.dampingFactor = 0.05; controls.screenSpacePanning = false; controls.minDistance = 0.3; controls.maxDistance = 4; controls.target.set(0, 0.1, 0); controls.autoRotate = true; controls.autoRotateSpeed = 0.4; controls.update();
-            window.addEventListener('resize', onWindowResize, false);
+
+                // Adjust Animation Speed based on U-Value
+                const baseDuration = 5.0; // Slowest (good U-value)
+                const worstDuration = 1.8; // Fastest (bad U-value)
+                const durationRange = baseDuration - worstDuration;
+                const uValueRange = uValueLuft - uValueArgon90;
+                // Normalize U-value within its range [0, 1] where 0=best, 1=worst
+                const normalizedUValue = uValueRange > 0 ? (estimatedUValue - uValueArgon90) / uValueRange : 0;
+                const animationDuration = baseDuration - (normalizedUValue * durationRange);
+                const limitedDuration = Math.max(worstDuration, Math.min(baseDuration, animationDuration));
+
+                if (svgParticlesContainer) {
+                    const particles = svgParticlesContainer.querySelectorAll('.heat-particle');
+                    particles.forEach(p => {
+                        const randomFactor = 0.9 + Math.random() * 0.2; // Add slight randomness
+                        p.style.animationDuration = `${limitedDuration * randomFactor}s`;
+                    });
+                }
+                if (animationComment) {
+                    let animCommentText = "Geringer Wärmefluss";
+                    if (estimatedUValue > 2.2) animCommentText = "Hoher Wärmefluss";
+                    else if (estimatedUValue > 1.6) animCommentText = "Moderater Wärmefluss";
+                     animationComment.textContent = animCommentText;
+                }
+
+                // Update Cost Savings Calculation
+                if (calculatedSavingsSpan && costSavingsTextElement) {
+                    try {
+                        const avgWindowAreaTotal = parseFloat(paramAreaSpan?.textContent || 25);
+                        const energyPrice = parseFloat(paramPriceSpan?.textContent || 12) / 100; // Convert cents to Euro
+                        const heatingDegreeDays = parseFloat(paramHddSpan?.textContent || 3500);
+                        const deltaU = Math.max(0, uValueLuft - estimatedUValue); // Ensure non-negative delta
+
+                        const energySavingsKWh = deltaU * avgWindowAreaTotal * heatingDegreeDays * 24 / 1000;
+                        const costSavingsEuro = energySavingsKWh * energyPrice;
+
+                        if(costUValueSpan) costUValueSpan.textContent = currentUValue;
+                        if(costUValueBadSpan) costUValueBadSpan.textContent = uValueLuft.toFixed(1);
+                        if(costAreaSpan) costAreaSpan.textContent = avgWindowAreaTotal;
+                        if(calculatedSavingsSpan) calculatedSavingsSpan.textContent = costSavingsEuro.toFixed(0);
+
+                        // Update displayed parameters (optional, could make them inputs later)
+                        if(paramAreaSpan) paramAreaSpan.textContent = avgWindowAreaTotal;
+                        if(paramHddSpan) paramHddSpan.textContent = heatingDegreeDays;
+                        if(paramPriceSpan) paramPriceSpan.textContent = (energyPrice * 100).toFixed(0);
+
+                    } catch (e) {
+                        console.error("Error calculating cost savings:", e);
+                         if(calculatedSavingsSpan) calculatedSavingsSpan.textContent = "N/A";
+                    }
+                }
+            }
+
+            if (slider) {
+                // Use 'input' for continuous update, 'change' for update on release
+                slider.addEventListener('input', () => updateHeatFlowAndCosts(parseInt(slider.value)));
+                // Initial calculation
+                updateHeatFlowAndCosts(parseInt(slider.value));
+            }
+
+            if (infoToggle && explanationBox) {
+                infoToggle.addEventListener('click', () => {
+                    const isVisible = explanationBox.style.display === 'block';
+                    explanationBox.style.display = isVisible ? 'none' : 'block';
+                    explanationBox.setAttribute('aria-hidden', String(isVisible));
+                    infoToggle.textContent = isVisible ? '❓' : '💡';
+                    infoToggle.setAttribute('aria-expanded', !isVisible);
+                });
+                // Ensure initial state is set correctly
+                 explanationBox.style.display = 'none';
+                 explanationBox.setAttribute('aria-hidden', 'true');
+                 infoToggle.setAttribute('aria-expanded', 'false');
+            }
+
+
+            // --- Three.js Setup ---
+            const container3D = document.getElementById('threejs-container');
+            let controls; // Make controls accessible in resize function
+
+            if (container3D && typeof THREE !== 'undefined') {
+                try {
+                    const scene = new THREE.Scene();
+                    scene.background = new THREE.Color(0x1a1a1a);
+
+                    const camera = new THREE.PerspectiveCamera(50, container3D.clientWidth / container3D.clientHeight, 0.1, 1000);
+                    camera.position.set(0.5, 0.6, 1.2); // Initial position
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); // Use alpha for potential background transparency
+                    renderer.setSize(container3D.clientWidth, container3D.clientHeight);
+                    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.outputColorSpace = THREE.SRGBColorSpace; // Correct color space
+                    renderer.shadowMap.enabled = true; // Enable shadows
+                    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Softer shadows
+                    container3D.appendChild(renderer.domElement);
+
+                    // Lighting
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // Slightly brighter ambient
+                    scene.add(ambientLight);
+                    const directionalLight = new THREE.DirectionalLight(0xffffff, 2.5); // Stronger directional
+                    directionalLight.position.set(3, 4, 3); // Adjusted position
+                    directionalLight.castShadow = true;
+                    // Configure shadow properties for performance/quality balance
+                    directionalLight.shadow.mapSize.width = 1024;
+                    directionalLight.shadow.mapSize.height = 1024;
+                    directionalLight.shadow.camera.near = 0.5;
+                    directionalLight.shadow.camera.far = 15;
+                    scene.add(directionalLight);
+
+                    // Optional: Add a subtle hemisphere light for softer fill
+                    const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 0.3);
+                    scene.add(hemisphereLight);
+
+                    // Loading Manager & Progress Bar
+                    const loadingManager = new THREE.LoadingManager();
+                    const progressBar = document.getElementById('threejs-loading-progress');
+
+                    loadingManager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
+                        if (progressBar) {
+                            progressBar.style.width = ( itemsLoaded / itemsTotal * 100 ) + '%';
+                        }
+                    };
+                    loadingManager.onLoad = function () {
+                         if (progressBar) {
+                             progressBar.style.width = '100%'; // Ensure it reaches 100%
+                             // Fade out the progress bar
+                             progressBar.style.opacity = '0';
+                             setTimeout(() => { progressBar.style.display = 'none'; }, 1000); // Hide after fade out
+                         }
+                         console.log("3D Modell geladen.");
+                         // Stop auto-rotate after load maybe?
+                         // if(controls) controls.autoRotate = false;
+                    };
+                    loadingManager.onError = function (url) {
+                        console.error('Fehler beim Laden des 3D-Modells von:', url);
+                        displayLoadError();
+                    };
+
+                    // GLTF Loader
+                    const loader = new GLTFLoader(loadingManager);
+                    loader.load(
+                        'ThermoMetric.glb', // Path relative to index.html
+                        function (gltf) {
+                            const model = gltf.scene;
+                            // Center and scale the model (adjust values as needed)
+                            const box = new THREE.Box3().setFromObject(model);
+                            const center = box.getCenter(new THREE.Vector3());
+                            const size = box.getSize(new THREE.Vector3());
+                            const maxDim = Math.max(size.x, size.y, size.z);
+                            const scale = 0.8 / maxDim; // Adjust scale factor as needed
+                            model.scale.set(scale, scale, scale);
+                            model.position.sub(center.multiplyScalar(scale)); // Center the model
+
+                            model.traverse(function (node) {
+                                 if (node.isMesh) {
+                                     node.castShadow = true;
+                                     node.receiveShadow = true;
+                                 }
+                            });
+                            scene.add(model);
+                        },
+                        undefined, // onProgress is handled by LoadingManager
+                        function (error) {
+                            console.error('Fehler im Ladevorgang des 3D-Modells:', error);
+                            displayLoadError(); // Display error message in the container
+                        }
+                    );
+
+                    // Controls
+                    controls = new OrbitControls(camera, renderer.domElement);
+                    controls.enableDamping = true;
+                    controls.dampingFactor = 0.05;
+                    controls.screenSpacePanning = false;
+                    controls.minDistance = 0.3;
+                    controls.maxDistance = 4;
+                    controls.target.set(0, 0.1, 0); // Adjust target based on model centering
+                    controls.autoRotate = true;
+                    controls.autoRotateSpeed = 0.5; // Slightly faster rotation
+                    controls.maxPolarAngle = Math.PI / 1.8; // Prevent looking directly from below/top
+                    controls.update();
+
+                    // Stop auto-rotate on user interaction
+                    const stopAutoRotate = () => {
+                        if (controls) controls.autoRotate = false;
+                        renderer.domElement.removeEventListener('pointerdown', stopAutoRotate);
+                        renderer.domElement.removeEventListener('wheel', stopAutoRotate);
+                    };
+                    renderer.domElement.addEventListener('pointerdown', stopAutoRotate, { once: true });
+                    renderer.domElement.addEventListener('wheel', stopAutoRotate, { once: true });
+
+
+                    // Resize Listener
+                    window.addEventListener('resize', onWindowResize, false);
+
+                    // Animation Loop
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        controls.update(); // Required if enableDamping or autoRotate is true
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+
+                } catch (err) {
+                    console.error("Fehler beim Initialisieren von Three.js:", err);
+                     displayLoadError("Three.js konnte nicht initialisiert werden.");
+                }
+
+            } else if (!container3D) {
+                console.warn("Three.js Container (ID: threejs-container) nicht gefunden.");
+            } else {
+                console.warn("Three.js Bibliothek nicht geladen (check importmap).");
+                 displayLoadError("Three.js Bibliothek konnte nicht geladen werden.");
+            }
+
+            // --- Helper Functions for 3D View ---
             function onWindowResize() {
-                if (container3D) {
+                if (container3D && camera && renderer) {
                     camera.aspect = container3D.clientWidth / container3D.clientHeight;
                     camera.updateProjectionMatrix();
                     renderer.setSize(container3D.clientWidth, container3D.clientHeight);
                 }
             }
-            function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); }
-            animate();
-        } else { console.warn("Three.js Container (ID: threejs-container) nicht gefunden."); }
 
-        // --- Smooth Scrolling & Active Nav Link ---
-         document.querySelectorAll('header nav a[href^="#"], a.cta-button[href^="#"]').forEach(anchor => {
-             anchor.addEventListener('click', function (e) {
-                 const href = this.getAttribute('href');
-                 if (href && href.startsWith('#') && href.length > 1) {
-                    e.preventDefault();
-                    const targetElement = document.querySelector(href);
-                    if(targetElement) {
-                        const headerOffset = document.querySelector('header')?.offsetHeight || 70;
-                        const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20;
-                        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+            function displayLoadError(message = '3D-Modell konnte nicht geladen werden.') {
+                if (container3D) {
+                    // Remove progress bar if it exists
+                    const progressBar = document.getElementById('threejs-loading-progress');
+                    if (progressBar) progressBar.style.display = 'none';
 
-                         // Update active link on click (especially for non-nav buttons)
-                        document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
-                        const matchingNavLink = document.querySelector(`.nav-links a[href="${href}"]`);
-                        if (matchingNavLink) {
-                            matchingNavLink.classList.add('active');
-                        }
-                         // Close mobile menu if open
-                         if (navList && navList.classList.contains('active')) {
-                             menuToggle.click();
-                         }
-                    }
+                    // Display error message
+                    const errorNotice = document.createElement('div');
+                    errorNotice.textContent = message;
+                    errorNotice.style.color = 'var(--accent-red)';
+                    errorNotice.style.textAlign = 'center';
+                    errorNotice.style.padding = '20px';
+                    errorNotice.style.position = 'absolute';
+                    errorNotice.style.top = '50%';
+                    errorNotice.style.left = '50%';
+                    errorNotice.style.transform = 'translate(-50%, -50%)';
+                    container3D.appendChild(errorNotice);
                 }
-             });
-         });
+            }
 
-        const sections = document.querySelectorAll('section[id]');
-        const navLinksObserver = document.querySelectorAll('.nav-links a'); // Use the specific nav links
-        window.addEventListener('scroll', () => {
-             let currentSectionId = '';
-             const scrollPosition = window.pageYOffset;
-             const headerHeight = document.querySelector('header')?.offsetHeight || 70;
-             sections.forEach(section => {
-                 const sectionTop = section.offsetTop - headerHeight - 50;
-                 const sectionBottom = sectionTop + section.offsetHeight;
-                 if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) { currentSectionId = section.getAttribute('id'); }
-             });
-             if (scrollPosition < (document.querySelector('#hero')?.offsetTop || 0) + (document.querySelector('#hero')?.offsetHeight || 0) - headerHeight - 50) { currentSectionId = 'hero'; }
-             if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 50) { const lastSection = sections[sections.length - 1]; if (lastSection) { currentSectionId = lastSection.getAttribute('id'); } }
-             navLinksObserver.forEach(link => {
-                 link.classList.remove('active');
-                 const linkHref = link.getAttribute('href');
-                 if (linkHref === `#${currentSectionId}` || (currentSectionId === 'hero' && linkHref === '#hero') ) { link.classList.add('active'); }
-             });
-        }, { passive: true });
 
-        // --- Form Submission Handling ---
-        const form = document.getElementById('preorder-form');
-        const formResponse = document.getElementById('form-response');
-        if (form && formResponse) {
-            form.addEventListener('submit', async function(event) {
-                event.preventDefault(); const formData = new FormData(form);
-                formResponse.textContent = 'Sende Daten...'; formResponse.className = '';
-                try {
-                    const response = await fetch(form.action, { method: form.method, body: formData, headers: { 'Accept': 'application/json' } });
-                    if (response.ok) { formResponse.textContent = 'Vielen Dank! Wir haben Ihre Anfrage erhalten und melden uns bald.'; formResponse.className = 'success'; form.reset(); }
-                    else { const data = await response.json(); if (data.errors) { formResponse.textContent = 'Fehler: ' + data.errors.map(error => error.message).join(', '); } else { formResponse.textContent = 'Fehler beim Senden. Bitte versuchen Sie es später erneut.'; } formResponse.className = 'error'; }
-                } catch (error) { console.error('Form submission error:', error); formResponse.textContent = 'Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.'; formResponse.className = 'error'; }
+            // --- Smooth Scrolling & Active Nav Link Highlighting ---
+            document.querySelectorAll('header nav a[href^="#"], a.cta-button[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href && href.startsWith('#') && href.length > 1) {
+                        const targetElement = document.querySelector(href);
+                        if (targetElement) {
+                            e.preventDefault(); // Prevent default only if target exists
+                            const header = document.querySelector('header');
+                            const headerOffset = header ? header.offsetHeight : 70; // Get dynamic header height
+                            const elementPosition = targetElement.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20; // Extra offset
+
+                            window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+
+                            // Update active link immediately on click
+                            updateActiveNavLink(href);
+
+                            // Close mobile menu if open and it wasn't the toggle button itself clicked
+                            if (navList && navList.classList.contains('active') && !this.classList.contains('menu-toggle')) {
+                                menuToggle?.click();
+                            }
+                        }
+                    }
+                });
             });
-        }
 
+            // Intersection Observer for highlighting nav links on scroll
+            const sections = document.querySelectorAll('main section[id]');
+            let currentSectionId = '';
+
+            const observerOptions = {
+              root: null, // relative to document viewport
+              rootMargin: `-${(document.querySelector('header')?.offsetHeight || 70) + 40}px 0px -40% 0px`, // Adjust top margin for header, bottom margin to trigger earlier
+              threshold: 0 // Trigger as soon as element enters the margin
+            };
+
+            const sectionObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                         currentSectionId = `#${entry.target.id}`;
+                         updateActiveNavLink(currentSectionId);
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                sectionObserver.observe(section);
+            });
+
+            // Function to update active nav link class
+            function updateActiveNavLink(targetHref) {
+                 document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === targetHref) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            // Set initial active link based on load state (optional, might need adjustment)
+            const initialHash = window.location.hash;
+            if (initialHash && document.querySelector(initialHash)) {
+                updateActiveNavLink(initialHash);
+                 // Optional: Smooth scroll to hash on load if needed, respecting header offset
+                 // setTimeout(() => {
+                 //    const targetElement = document.querySelector(initialHash);
+                 //    if (targetElement) {
+                 //         const headerOffset = document.querySelector('header')?.offsetHeight || 70;
+                 //         const elementPosition = targetElement.getBoundingClientRect().top;
+                 //         const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20;
+                 //         window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+                 //    }
+                 // }, 100); // Delay slightly to ensure layout is stable
+            } else {
+                 // Check initial scroll position if no hash - highlight first link by default
+                 updateActiveNavLink(document.querySelector('.nav-links a')?.getAttribute('href') || '#hero');
+            }
+
+
+            // --- Asynchronous Form Submission ---
+            const preorderForm = document.getElementById('preorder-form');
+            const formResponseDiv = document.getElementById('form-response');
+
+            if (preorderForm && formResponseDiv) {
+                preorderForm.addEventListener('submit', function(event) {
+                    event.preventDefault(); // Prevent default synchronous submission
+                    formResponseDiv.textContent = 'Sende Daten...';
+                    formResponseDiv.className = ''; // Reset classes
+                    formResponseDiv.style.opacity = '1'; // Make visible
+
+                    const formData = new FormData(preorderForm);
+                    const formAction = preorderForm.action; // Get endpoint from form action attribute
+
+                     // Basic check if endpoint looks like a placeholder
+                     if (!formAction || formAction.includes('YOUR_') || formAction.includes('ENDPOINT')) {
+                         console.error("Form action URL looks like a placeholder. Please replace it in the HTML.");
+                         formResponseDiv.textContent = 'Fehler: Formular-Endpunkt nicht konfiguriert.';
+                         formResponseDiv.className = 'error';
+                         return; // Stop submission
+                     }
+
+
+                    // GA Event: Track form submission attempt
+                    if (typeof gtag === 'function') {
+                       gtag('event', 'form_submit_attempt', {
+                         'event_category': 'Form',
+                         'event_label': 'Preorder_Interest' // More specific label
+                       });
+                    }
+
+                    fetch(formAction, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json' // Important for many FaaS
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            formResponseDiv.textContent = 'Vielen Dank! Wir haben Ihre Anfrage erhalten und melden uns bald.';
+                            formResponseDiv.className = 'success';
+                            preorderForm.reset(); // Clear the form on success
+                            // GA Event: Track successful submission
+                            if (typeof gtag === 'function') {
+                              gtag('event', 'form_submit_success', {
+                                'event_category': 'Form',
+                                'event_label': 'Preorder_Interest'
+                              });
+                            }
+                        } else {
+                            // Attempt to get error message from service response
+                            return response.json().then(data => {
+                                // Customize error message based on typical FaaS responses
+                                throw new Error(data.error || data.message || 'Submission failed. Please check your input.');
+                            }).catch(() => {
+                                // Fallback if response is not JSON or doesn't contain error info
+                                throw new Error(`Submission failed. Server responded with status: ${response.status}`);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Form submission error:', error);
+                        formResponseDiv.textContent = `Fehler: ${error.message || 'Could not submit form. Please check connection.'}`;
+                        formResponseDiv.className = 'error';
+                        // GA Event: Track submission error
+                        if (typeof gtag === 'function') {
+                            gtag('event', 'form_submit_error', {
+                                'event_category': 'Form',
+                                'event_label': 'Preorder_Interest',
+                                'error_message': error.message || 'Unknown fetch error'
+                            });
+                        }
+                    })
+                    .finally(() => {
+                        // Optional: Hide the message after a delay
+                         setTimeout(() => { formResponseDiv.style.opacity = '0'; }, 6000);
+                    });
+                });
+            } else {
+                 if (!preorderForm) console.warn("Preorder form not found.");
+                 if (!formResponseDiv) console.warn("Form response div not found.");
+            }
+
+            // --- Intersection Observer for Lazy Loading Images ---
+            const lazyImages = document.querySelectorAll('img.lazy');
+
+            if ("IntersectionObserver" in window) {
+                // Create one observer for all images
+                let imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const image = entry.target;
+                            // console.log('Lazy loading image:', image.dataset.src); // Debugging
+                            // Start loading the actual image
+                            if (image.dataset.src) {
+                                image.src = image.dataset.src;
+                            } else {
+                                console.warn("Lazy image missing data-src:", image);
+                                image.classList.remove('lazy'); // Remove lazy if no src
+                                observer.unobserve(image); // Stop observing if no src
+                                return;
+                            }
+
+
+                            // Optional: Add fade-in effect on load
+                            image.addEventListener('load', () => {
+                                image.classList.remove('lazy'); // Remove lazy class to potentially trigger CSS transition
+                            }, { once: true }); // Ensure listener is removed after load
+
+                             image.addEventListener('error', () => {
+                                 console.error('Error loading lazy image:', image.dataset.src);
+                                 image.classList.remove('lazy'); // Still remove class
+                             }, { once: true });
+
+
+                            // Stop observing the image once triggered
+                            observer.unobserve(image);
+                        }
+                    });
+                }, {
+                    rootMargin: "0px 0px 150px 0px" // Start loading images 150px before they enter the viewport
+                });
+
+                // Observe each lazy image
+                lazyImages.forEach(image => {
+                    imageObserver.observe(image);
+                });
+
+            } else {
+                // Fallback for very old browsers without Intersection Observer
+                console.warn("IntersectionObserver not supported. Loading all images immediately.");
+                lazyImages.forEach(image => {
+                   if (image.dataset.src) {
+                       image.src = image.dataset.src;
+                       image.classList.remove('lazy');
+                   }
+                });
+            }
+
+
+            // --- Google Analytics Event Tracking for Buttons ---
+            function trackButtonClick(selector, category, label) {
+                const button = document.querySelector(selector);
+                if (!button) {
+                    // console.warn(`GA Tracking: Button not found for selector: ${selector}`); // Reduce console noise
+                    return;
+                }
+                if (typeof gtag !== 'function') {
+                     // console.error('GA Tracking: gtag function not defined.'); // Reduce console noise
+                     return; // Don't add listener if gtag is missing
+                }
+
+                button.addEventListener('click', function(event) {
+                    // Determine button text or use label as fallback
+                    const buttonText = button.textContent?.trim() || button.value?.trim() || button.alt?.trim() || label;
+
+                    const params = {
+                        'event_category': category,
+                        'event_label': label,
+                        'button_text': buttonText.substring(0, 100), // Limit text length for GA
+                    };
+
+                    // Add URL if it's a link
+                    if (this.href) {
+                        params['link_url'] = this.href; // Use link_url standard parameter
+                    }
+
+                    // Check if the click navigates away and use callback if needed
+                    const navigatesAway = this.href && this.target !== '_blank' && !this.href.startsWith('#') && !this.href.startsWith('mailto:') && !this.href.startsWith('tel:');
+
+                    // Send event directly (callback method can be unreliable/complex)
+                    console.log(`GA Event Fired: ${category} - ${label}`, params);
+                    gtag('event', 'button_click', params);
+
+                    // If navigation needs to be delayed slightly to ensure GA fires,
+                    // you *could* uncomment the preventDefault and use a short timeout,
+                    // but this is generally less reliable than event_callback or beacon API.
+                    // if (navigatesAway) {
+                    //   event.preventDefault();
+                    //   setTimeout(() => { window.location = button.href; }, 150); // Short delay
+                    // }
+                });
+            }
+
+            // --- Attach GA Trackers ---
+            trackButtonClick('#hero-cta-main', 'CTA', 'Hero_Buy_Support');
+            trackButtonClick('#solution-cta-more', 'CTA', 'Solution_More_Info');
+            trackButtonClick('#solution-cta-interest', 'CTA', 'Solution_Interest');
+            trackButtonClick('#product-cta-availability', 'CTA', 'Product_Availability');
+            trackButtonClick('#advantages-cta-buy', 'CTA', 'Advantages_Buy_Interest');
+            trackButtonClick('#advantages-cta-rent', 'CTA', 'Advantages_Rent_Info');
+            trackButtonClick('#rent-cta-interest', 'CTA', 'Rent_Interest');
+            trackButtonClick('#team-cta-contact', 'CTA', 'Team_Contact_Mail');
+            // Form submit button click tracking is often redundant if you track form_submit_attempt/success/error
+            // trackButtonClick('#preorder-submit-button', 'Form', 'Preorder_Submit_Click');
+
+
+        }); // End DOMContentLoaded
     </script>
 
 </body>
