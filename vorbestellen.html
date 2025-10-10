@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>U-Check – Vorbestellung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png" />
+    <style>
+        :root {
+            --bg: radial-gradient(circle at 12% 8%, rgba(79, 114, 187, 0.45), transparent 55%), radial-gradient(circle at 85% 15%, rgba(227, 80, 122, 0.38), transparent 58%), #050913;
+            --panel-bg: rgba(13, 19, 35, 0.82);
+            --panel-border: rgba(123, 155, 220, 0.22);
+            --panel-highlight: rgba(255, 255, 255, 0.05);
+            --accent-start: #4f72bb;
+            --accent-end: #e3507a;
+            --warning: #f9b000;
+            --text-primary: #f5f7ff;
+            --text-muted: rgba(222, 231, 255, 0.78);
+            --radius-lg: 28px;
+            --radius-md: 22px;
+            --radius-sm: 14px;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(32px, 6vw, 72px);
+            position: relative;
+            overflow: hidden;
+        }
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -12%;
+            right: -12%;
+            height: 72px;
+            background: repeating-linear-gradient(135deg, var(--warning) 0 22px, rgba(5, 9, 19, 0.92) 22px 44px);
+            opacity: 0.32;
+            transform: rotate(-1.2deg);
+            pointer-events: none;
+        }
+        body::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(79, 114, 187, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(79, 114, 187, 0.08) 1px, transparent 1px);
+            background-size: 48px 48px;
+            opacity: 0.28;
+            pointer-events: none;
+        }
+
+        main {
+            position: relative;
+            z-index: 1;
+            width: min(960px, 100%);
+            background: rgba(7, 13, 26, 0.85);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--panel-border);
+            padding: clamp(32px, 5vw, 56px);
+            box-shadow: 0 50px 88px rgba(0, 0, 0, 0.46);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(28px, 4vw, 42px);
+        }
+        main::before {
+            content: "";
+            position: absolute;
+            inset: 18px;
+            border-radius: calc(var(--radius-lg) - 12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            pointer-events: none;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        .site-header {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .badge {
+            align-self: flex-start;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: rgba(249, 176, 0, 0.18);
+            color: var(--warning);
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+        .badge::before {
+            content: "🚧";
+            font-size: 1.1rem;
+        }
+
+        h1 {
+            margin: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: clamp(1.9rem, 4.2vw, 2.7rem);
+            letter-spacing: -0.01em;
+        }
+        h2 {
+            margin: 0 0 18px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 0.02em;
+        }
+        p {
+            margin: 0;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .site-grid {
+            display: grid;
+            gap: clamp(24px, 4vw, 32px);
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .site-panel {
+            position: relative;
+            background: var(--panel-bg);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--panel-border);
+            padding: clamp(24px, 4vw, 32px);
+            overflow: hidden;
+        }
+        .site-panel > * { position: relative; z-index: 1; }
+        .site-panel::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent 65%);
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        .site-panel--plan::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(79, 114, 187, 0.14) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(79, 114, 187, 0.14) 1px, transparent 1px);
+            background-size: 36px 36px;
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        .plan-list {
+            list-style: none;
+            margin: 22px 0 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .plan-item {
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+            padding: 16px 18px;
+            border-radius: var(--radius-sm);
+            background: rgba(8, 12, 24, 0.55);
+            border: 1px solid rgba(123, 155, 220, 0.18);
+            position: relative;
+        }
+        .plan-item::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .plan-item.is-active {
+            border-color: rgba(79, 114, 187, 0.65);
+            background: linear-gradient(135deg, rgba(79, 114, 187, 0.25), rgba(8, 12, 24, 0.55));
+            box-shadow: 0 18px 36px rgba(79, 114, 187, 0.22);
+        }
+        .plan-item.is-next {
+            border-color: rgba(249, 176, 0, 0.45);
+        }
+        .step-marker {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #071020;
+            background: linear-gradient(135deg, #f9b000, #ffd15a);
+            box-shadow: 0 12px 20px rgba(249, 176, 0, 0.32);
+        }
+        .plan-item strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #ffffff;
+        }
+        .plan-item small {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .site-panel--status::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(227, 80, 122, 0.22), transparent 62%);
+            opacity: 0.55;
+            pointer-events: none;
+        }
+
+        .status-grid {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            margin-bottom: 20px;
+        }
+        .status-card {
+            position: relative;
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(123, 155, 220, 0.24);
+            overflow: hidden;
+        }
+        .status-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.08), transparent 70%);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .status-card span {
+            display: block;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: rgba(222, 231, 255, 0.6);
+        }
+        .status-card strong {
+            display: block;
+            margin-top: 10px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.45rem;
+            color: #ffffff;
+        }
+        .status-card small {
+            display: block;
+            margin-top: 6px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .checklist {
+            list-style: none;
+            margin: 22px 0 0;
+            padding: 0;
+            display: grid;
+            gap: 12px;
+        }
+        .checklist li {
+            position: relative;
+            padding-left: 32px;
+            color: var(--text-muted);
+        }
+        .checklist li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 1.2rem;
+            color: rgba(222, 231, 255, 0.5);
+        }
+        .checklist li.done {
+            color: rgba(137, 214, 161, 0.9);
+        }
+        .checklist li.done::before {
+            content: "✔";
+            color: rgba(137, 214, 161, 0.95);
+        }
+        .checklist li.progress {
+            color: rgba(249, 176, 0, 0.88);
+        }
+        .checklist li.progress::before {
+            content: "↻";
+            color: rgba(249, 176, 0, 0.92);
+        }
+
+        .site-panel--call {
+            background: linear-gradient(135deg, rgba(79, 114, 187, 0.3), rgba(9, 14, 28, 0.9));
+            border: 1px solid rgba(79, 114, 187, 0.42);
+        }
+        .site-panel--call::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.16), transparent 60%);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .site-panel--call p + p { margin-top: 12px; }
+        .call-note {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 22px;
+        }
+        .actions a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 26px;
+            border-radius: 999px;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .actions a.primary {
+            background: linear-gradient(120deg, var(--accent-start), var(--accent-end));
+            color: #ffffff;
+            box-shadow: 0 20px 38px rgba(79, 114, 187, 0.28);
+        }
+        .actions a.secondary {
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            color: rgba(222, 231, 255, 0.85);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .actions a:hover,
+        .actions a:focus-visible {
+            transform: translateY(-2px);
+            box-shadow: 0 26px 46px rgba(16, 24, 45, 0.32);
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.85rem;
+            color: rgba(222, 231, 255, 0.6);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        footer nav {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        footer a {
+            color: rgba(222, 231, 255, 0.74);
+        }
+        footer a:hover,
+        footer a:focus-visible {
+            color: #ffffff;
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 24px; }
+            main { padding: 28px 22px; }
+            .site-grid { grid-template-columns: 1fr; }
+            .actions { flex-direction: column; }
+            .actions a { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header class="site-header">
+            <span class="badge">Baustelle</span>
+            <h1>Vorbestellungen gehen bald live</h1>
+            <p>Wir verlegen noch Leitungen in der Fertigung und schließen den Vorserienlauf ab. Tragen Sie sich ein, damit wir Sie zuerst informieren, sobald der Presale öffnet.</p>
+        </header>
+        <div class="site-grid">
+            <section class="site-panel site-panel--plan">
+                <h2>Bauplan</h2>
+                <p>Der Vorverkauf bleibt noch gesperrt, bis Hardware, Lieferkette und Dokumentation im Gleichschritt laufen. So sieht unser Fahrplan aus:</p>
+                <ul class="plan-list">
+                    <li class="plan-item is-active">
+                        <span class="step-marker">1</span>
+                        <div>
+                            <strong>Vorserien-Hardware im Dauertest</strong>
+                            <small>Sensorhalter, Messrahmen und Logging laufen aktuell unter realen Bedingungen.</small>
+                        </div>
+                    </li>
+                    <li class="plan-item is-next">
+                        <span class="step-marker">2</span>
+                        <div>
+                            <strong>Fertigungspartner onboarden</strong>
+                            <small>Komponenten bündeln, Montageplätze definieren und Lieferkette final abstimmen.</small>
+                        </div>
+                    </li>
+                    <li class="plan-item">
+                        <span class="step-marker">3</span>
+                        <div>
+                            <strong>Presale & Pilotierung öffnen</strong>
+                            <small>Reservierungen priorisiert nach Anwendungsfall – inklusive Terminierung der Pilotmessungen.</small>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+            <section class="site-panel site-panel--status">
+                <h2>Statusboard</h2>
+                <div class="status-grid">
+                    <div class="status-card">
+                        <span>Nächster Meilenstein</span>
+                        <strong>April 2025</strong>
+                        <small>Thermische Laufzeitversuche & Dauerbelastung der Sensorik.</small>
+                    </div>
+                    <div class="status-card">
+                        <span>Pilot-Slots geplant</span>
+                        <strong>5 Geräte</strong>
+                        <small>für Energieberatungen in der ersten Serie vorgesehen.</small>
+                    </div>
+                    <div class="status-card">
+                        <span>Antwortzeit</span>
+                        <strong>&lt;24h</strong>
+                        <small>für sämtliche Preorder- und Partneranfragen.</small>
+                    </div>
+                </div>
+                <ul class="checklist">
+                    <li class="done">Prototyp&nbsp;03 vermessen und validiert</li>
+                    <li class="progress">Fertigungspartner final abstimmen</li>
+                    <li>Preorder-Tooling und Logistik vorbereiten</li>
+                </ul>
+            </section>
+        </div>
+        <section class="site-panel site-panel--call">
+            <h2>Sichern Sie sich einen Slot</h2>
+            <p>Sie möchten beim Go-Live direkt informiert werden? Schreiben Sie uns mit zwei bis drei Stichworten zu Ihren Projekten und Messaufgaben.</p>
+            <p class="call-note">Wir würden uns sehr freuen, gemeinsam die ersten Seriengeräte auf Ihre Baustellen zu bringen.</p>
+            <div class="actions">
+                <a class="primary" href="mailto:info@u-check.online"><span aria-hidden="true">✉️</span>info@u-check.online</a>
+                <a class="secondary" href="index.html#kontakt">Zurück zur Startseite</a>
+            </div>
+        </section>
+        <footer>
+            <div>© <span id="year"></span> U-Check</div>
+            <nav aria-label="Weiterführende Links">
+                <a href="index.html">Startseite</a>
+                <a href="kontakt.html">Kontakt</a>
+                <a href="datenschutz.html">Datenschutz</a>
+                <a href="impressum.html">Impressum</a>
+            </nav>
+        </footer>
+    </main>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
